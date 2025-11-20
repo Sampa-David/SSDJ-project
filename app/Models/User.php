@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -21,6 +22,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'phone',
+        'company',
     ];
 
     /**
@@ -44,5 +47,37 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Get all tickets for the user
+     */
+    public function tickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class);
+    }
+
+    /**
+     * Get active tickets for the user
+     */
+    public function activeTickets()
+    {
+        return $this->tickets()->where('status', 'active');
+    }
+
+    /**
+     * Get total amount spent on tickets
+     */
+    public function getTotalSpentAttribute(): float
+    {
+        return $this->tickets()->where('status', '!=', 'cancelled')->sum('price');
+    }
+
+    /**
+     * Get ticket count by type
+     */
+    public function getTicketCountByType(string $type): int
+    {
+        return $this->tickets()->where('ticket_type', $type)->count();
     }
 }
