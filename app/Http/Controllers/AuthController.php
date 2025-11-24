@@ -43,8 +43,19 @@ class AuthController extends Controller
             'company' => $request->company,
         ]);
 
-        Auth::login($user);
+        // Check if email is admin email and assign admin role
+        if ($request->email === 'davadmin@gmail.com') {
+            $adminRole = \App\Models\Role::firstOrCreate(
+                ['slug' => 'admin'],
+                ['name' => 'Admin', 'description' => 'Full access to the system']
+            );
+            $user->assignRole($adminRole);
+            Auth::login($user);
+            return redirect()->route('admin.dashboard')
+                ->with('success', 'Admin account created successfully!');
+        }
 
+        Auth::login($user);
         return redirect()->route('dashboard')->with('success', 'Account created successfully!');
     }
 
@@ -68,6 +79,13 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
+            
+            // Redirect admin to admin dashboard
+            $user = Auth::user();
+            if ($user && $user->email === 'davadmin@gmail.com') {
+                return redirect()->route('admin.dashboard')->with('success', 'Welcome back, Admin!');
+            }
+            
             return redirect()->route('dashboard')->with('success', 'Welcome back!');
         }
 
