@@ -23,13 +23,23 @@
         @auth
         <li class="dropdown"><a href="#"><span>My Account</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
           <ul>
-            <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
-            <li><a href="{{ route('my-tickets') }}">My Tickets</a></li>
+            @if(auth()->user()->isAdmin())
+              <li><a href="{{ route('admin.dashboard') }}"><i class="bi bi-speedometer2"></i> Admin Dashboard</a></li>
+              <li><a href="{{ route('admin.users') }}"><i class="bi bi-people"></i> Manage Users</a></li>
+              <li><a href="{{ route('admin.tickets') }}"><i class="bi bi-ticket"></i> Manage Tickets</a></li>
+              <li><a href="{{ route('admin.stats') }}"><i class="bi bi-bar-chart"></i> Statistics</a></li>
+              <li><hr class="dropdown-divider"></li>
+            @endif
+            <li><a href="{{ route('dashboard') }}"><i class="bi bi-house"></i> My Dashboard</a></li>
+            <li><a href="{{ route('my-tickets') }}"><i class="bi bi-ticket-perforated"></i> My Tickets</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a href="#"><i class="bi bi-gear"></i> Settings</a></li>
+            <li><a href="#"><i class="bi bi-question-circle"></i> Support</a></li>
             <li><hr class="dropdown-divider"></li>
             <li>
               <form action="{{ route('logout') }}" method="POST" style="display:inline;">
                 @csrf
-                <button type="submit" class="dropdown-item" style="border: none; background: none; cursor: pointer;">Logout</button>
+                <button type="submit" class="dropdown-item" style="border: none; background: none; cursor: pointer; color: #dc3545;"><i class="bi bi-box-arrow-right"></i> Logout</button>
               </form>
             </li>
           </ul>

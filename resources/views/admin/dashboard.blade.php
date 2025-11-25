@@ -1,77 +1,70 @@
-@extends('layouts.app')
+@extends('layouts.admin')
+
+@section('title', 'Admin Dashboard')
+@section('page-title', 'Admin Dashboard')
 
 @section('content')
-<div class="container-fluid py-4">
-    <!-- Header -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <h1 class="h2">Admin Dashboard</h1>
-            <p class="text-muted">Welcome back! Here's your event overview.</p>
-        </div>
+<div class="page-header">
+    <div>
+        <h2>Welcome back!</h2>
+        <p class="text-muted">Here's your complete event overview.</p>
     </div>
+</div>
 
     <!-- Key Statistics Cards -->
     <div class="row mb-4">
         <div class="col-md-3 mb-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <p class="text-muted mb-1">Total Users</p>
-                            <h3 class="mb-0">{{ $totalUsers }}</h3>
-                        </div>
-                        <span class="badge bg-primary p-2">
-                            <i class="fas fa-users"></i>
-                        </span>
+            <div class="card stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p class="text-muted mb-1">Total Users</p>
+                        <h3 class="mb-0">{{ $totalUsers }}</h3>
                     </div>
+                    <span class="badge bg-primary p-2">
+                        <i class="fas fa-users"></i>
+                    </span>
                 </div>
             </div>
         </div>
 
         <div class="col-md-3 mb-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <p class="text-muted mb-1">Total Tickets</p>
-                            <h3 class="mb-0">{{ $totalTickets }}</h3>
-                        </div>
-                        <span class="badge bg-success p-2">
-                            <i class="fas fa-ticket-alt"></i>
-                        </span>
+            <div class="card stat-card success">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p class="text-muted mb-1">Total Tickets</p>
+                        <h3 class="mb-0">{{ $totalTickets }}</h3>
                     </div>
+                    <span class="badge bg-success p-2">
+                        <i class="fas fa-ticket-alt"></i>
+                    </span>
                 </div>
             </div>
         </div>
 
         <div class="col-md-3 mb-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <p class="text-muted mb-1">Total Revenue</p>
-                            <h3 class="mb-0">${{ number_format($totalRevenue, 2) }}</h3>
-                        </div>
-                        <span class="badge bg-warning p-2">
-                            <i class="fas fa-dollar-sign"></i>
-                        </span>
+            <div class="card stat-card warning">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p class="text-muted mb-1">Total Revenue</p>
+                        <h3 class="mb-0">${{ number_format($totalRevenue, 2) }}</h3>
                     </div>
+                    <span class="badge bg-warning p-2">
+                        <i class="fas fa-dollar-sign"></i>
+                    </span>
                 </div>
             </div>
         </div>
 
         <div class="col-md-3 mb-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start">
-                        <div>
-                            <p class="text-muted mb-1">Active Tickets</p>
-                            <h3 class="mb-0">{{ $activeTickets }}</h3>
-                        </div>
-                        <span class="badge bg-info p-2">
-                            <i class="fas fa-check-circle"></i>
-                        </span>
+            <div class="card stat-card info">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <p class="text-muted mb-1">Active Tickets</p>
+                        <h3 class="mb-0">{{ $activeTickets }}</h3>
                     </div>
+                    <span class="badge bg-info p-2">
+                        <i class="fas fa-check-circle"></i>
+                    </span>
                 </div>
             </div>
         </div>
@@ -80,10 +73,10 @@
     <!-- Charts Row -->
     <div class="row mb-4">
         <!-- Revenue by Type -->
-        <div class="col-md-6 mb-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-bottom">
-                    <h5 class="mb-0">Revenue by Ticket Type</h5>
+        <div class="col-lg-6 mb-3">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-chart-pie"></i> Revenue by Ticket Type</h5>
                 </div>
                 <div class="card-body">
                     <div id="revenueChart" style="height: 300px;"></div>
@@ -99,8 +92,8 @@
                             @foreach($revenueByType as $item)
                             <tr>
                                 <td>{{ ucfirst(str_replace('_', ' ', $item->ticket_type)) }}</td>
-                                <td>{{ $item->count }}</td>
-                                <td>${{ number_format($item->revenue, 2) }}</td>
+                                <td><span class="badge bg-primary">{{ $item->count }}</span></td>
+                                <td class="fw-bold">${{ number_format($item->revenue, 2) }}</td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -110,16 +103,16 @@
         </div>
 
         <!-- Ticket Status Distribution -->
-        <div class="col-md-6 mb-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-bottom">
-                    <h5 class="mb-0">Ticket Status</h5>
+        <div class="col-lg-6 mb-3">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-chart-doughnut"></i> Ticket Status Distribution</h5>
                 </div>
                 <div class="card-body">
                     <div id="statusChart" style="height: 300px;"></div>
                     <div class="mt-3">
                         @foreach($ticketStatus as $status => $count)
-                        <div class="d-flex justify-content-between mb-2">
+                        <div class="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom">
                             <span class="text-capitalize">{{ $status }}</span>
                             <span class="badge bg-secondary">{{ $count }}</span>
                         </div>
@@ -133,10 +126,10 @@
     <!-- Recent Transactions -->
     <div class="row mb-4">
         <div class="col-12">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Recent Transactions</h5>
-                    <a href="{{ route('admin.tickets') }}" class="btn btn-sm btn-outline-primary">View All</a>
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0"><i class="fas fa-history"></i> Recent Transactions</h5>
+                    <a href="{{ route('admin.tickets') }}" class="btn btn-sm btn-outline-primary">View All <i class="fas fa-arrow-right"></i></a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -155,9 +148,9 @@
                                 @foreach($recentTransactions as $transaction)
                                 <tr>
                                     <td>{{ $transaction->purchased_at->format('M d, Y') }}</td>
-                                    <td>{{ $transaction->user->name }}</td>
+                                    <td><strong>{{ $transaction->user->name }}</strong></td>
                                     <td><span class="badge bg-light text-dark">{{ $transaction->type_label }}</span></td>
-                                    <td>${{ $transaction->price_display }}</td>
+                                    <td class="fw-bold">${{ $transaction->price_display }}</td>
                                     <td>
                                         <span class="badge @if($transaction->status === 'active') bg-success @elseif($transaction->status === 'used') bg-info @else bg-danger @endif">
                                             {{ ucfirst($transaction->status) }}
@@ -181,10 +174,10 @@
     <!-- Top Buyers & Expiring Tickets -->
     <div class="row">
         <!-- Top Buyers -->
-        <div class="col-md-6 mb-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-bottom">
-                    <h5 class="mb-0">Top Buyers</h5>
+        <div class="col-lg-6 mb-3">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-crown"></i> Top Buyers</h5>
                 </div>
                 <div class="card-body">
                     <div class="list-group list-group-flush">
@@ -203,10 +196,10 @@
         </div>
 
         <!-- Expiring Tickets -->
-        <div class="col-md-6 mb-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-bottom">
-                    <h5 class="mb-0">Expiring Soon (30 days)</h5>
+        <div class="col-lg-6 mb-3">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-calendar-times"></i> Expiring Soon (30 days)</h5>
                 </div>
                 <div class="card-body">
                     <div class="list-group list-group-flush">
@@ -221,19 +214,16 @@
                             </div>
                         </div>
                         @empty
-                        <p class="text-muted text-center py-3">No expiring tickets</p>
+                        <p class="text-muted text-center py-4"><i class="fas fa-check-circle"></i> No expiring tickets</p>
                         @endforelse
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
 @endsection
 
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     // Revenue by Type Chart
     const revenueCtx = document.getElementById('revenueChart')?.getContext('2d');

@@ -44,7 +44,7 @@ class AuthController extends Controller
         ]);
 
         // Check if email is admin email and assign admin role
-        if ($request->email === 'davadmin@gmail.com') {
+        if ($request->email === 'admin@gmail.com') {
             $adminRole = \App\Models\Role::firstOrCreate(
                 ['slug' => 'admin'],
                 ['name' => 'Admin', 'description' => 'Full access to the system']
@@ -82,7 +82,7 @@ class AuthController extends Controller
             
             // Redirect admin to admin dashboard
             $user = Auth::user();
-            if ($user && $user->email === 'davadmin@gmail.com') {
+            if ($user && $user->hasRole('admin')) {
                 return redirect()->route('admin.dashboard')->with('success', 'Welcome back, Admin!');
             }
             

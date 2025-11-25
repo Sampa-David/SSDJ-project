@@ -1,17 +1,43 @@
 #!/bin/bash
 set -e
 
-echo "Installing dependencies..."
-composer install --no-dev --optimize-autoloader
+echo "🚀 SSDJ Deployment on Render..."
+echo "================================"
 
-echo "Generating APP_KEY..."
-php artisan key:generate --force
+# Navigate to app directory
+cd /opt/render/project/src || true
 
-echo "Running migrations..."
-php artisan migrate --force
+# Update composer dependencies
+echo "📦 Installing dependencies..."
+composer install --no-interaction --prefer-dist --optimize-autoloader
 
-echo "Clearing cache..."
+# Generate APP_KEY if not exists
+if [ -z "$APP_KEY" ]; then
+  echo "🔑 Generating APP_KEY..."
+  php artisan key:generate --force
+fi
+
+# Clear all caches
+echo "🧹 Clearing caches..."
 php artisan config:clear
 php artisan cache:clear
+php artisan view:clear
+php artisan route:clear
 
-echo "Deployment complete!"
+# Run database migrations
+echo "📊 Running migrations..."
+php artisan migrate --force
+
+# Build frontend assets
+echo "🎨 Building assets..."
+npm install --production
+npm run build
+
+# Optimize for production
+echo "⚡ Optimizing application..."
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+echo "✅ Deployment complete!"
+echo "🌐 Your app will be available at: https://ssdj-app.onrender.com"

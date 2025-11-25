@@ -1,26 +1,26 @@
-@extends('layouts.app')
+@extends('layouts.admin')
+
+@section('title', 'Ticket Details')
+@section('page-title', 'Ticket Details: ' . $ticket->ticket_number)
 
 @section('content')
-<div class="container py-4">
-    <div class="row mb-4">
-        <div class="col-12">
-            <a href="{{ route('admin.tickets') }}" class="btn btn-outline-secondary">
-                <i class="fas fa-arrow-left"></i> Back
-            </a>
-        </div>
-    </div>
+<div class="mb-4">
+    <a href="{{ route('admin.tickets') }}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left"></i> Back to Tickets
+    </a>
+</div>
 
     <div class="row">
         <div class="col-md-6">
-            <div class="card border-0 shadow-sm mb-3">
-                <div class="card-header bg-white border-bottom">
-                    <h6 class="mb-0">Ticket Information</h6>
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="fas fa-ticket-alt"></i> Ticket Information</h6>
                 </div>
                 <div class="card-body">
                     <table class="table table-borderless">
                         <tr>
                             <td><strong>Ticket Number:</strong></td>
-                            <td><code>{{ $ticket->ticket_number }}</code></td>
+                            <td><code class="bg-light p-2 rounded">{{ $ticket->ticket_number }}</code></td>
                         </tr>
                         <tr>
                             <td><strong>Type:</strong></td>
@@ -28,7 +28,7 @@
                         </tr>
                         <tr>
                             <td><strong>Price:</strong></td>
-                            <td>{{ $ticket->price_display }}</td>
+                            <td class="fw-bold">${{ $ticket->price_display }}</td>
                         </tr>
                         <tr>
                             <td><strong>Status:</strong></td>
@@ -56,9 +56,9 @@
         </div>
 
         <div class="col-md-6">
-            <div class="card border-0 shadow-sm mb-3">
-                <div class="card-header bg-white border-bottom">
-                    <h6 class="mb-0">Buyer Information</h6>
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="fas fa-user"></i> Buyer Information</h6>
                 </div>
                 <div class="card-body">
                     <table class="table table-borderless">
@@ -86,7 +86,7 @@
                             <td><strong>View Profile:</strong></td>
                             <td>
                                 <a href="{{ route('admin.user', $ticket->user) }}" class="btn btn-sm btn-outline-primary">
-                                    <i class="fas fa-user"></i> View
+                                    <i class="fas fa-user"></i> View Profile
                                 </a>
                             </td>
                         </tr>
@@ -99,12 +99,12 @@
     @if($ticket->qr_code)
     <div class="row">
         <div class="col-md-6">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-bottom">
-                    <h6 class="mb-0">QR Code</h6>
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="fas fa-qrcode"></i> QR Code</h6>
                 </div>
-                <div class="card-body text-center">
-                    <img src="{{ $ticket->qr_code }}" alt="QR Code" style="max-width: 200px;">
+                <div class="card-body text-center py-4">
+                    <img src="{{ $ticket->qr_code }}" alt="QR Code" style="max-width: 200px; border-radius: 8px;">
                 </div>
             </div>
         </div>
