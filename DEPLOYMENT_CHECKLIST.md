@@ -1,12 +1,220 @@
-# Deployment & Testing Checklist
+# ✅ Checklist Déploiement SSDJ Production sur Render
 
-## Pre-Launch Checklist
+## 🔍 Vérifications Avant Déploiement
 
-### ✅ Database
-- [ ] Migration file created: `2025_11_20_031548_create_tickets_table.php`
-- [ ] Run `php artisan migrate` to create tables
-- [ ] Verify MySQL has database `ssdj` with `s2dj_user` credentials
-- [ ] Check foreign key constraints are created
+### ✅ Code & Git
+- [ ] Tous les changements commités
+- [ ] Branche `main` à jour
+- [ ] Pas de fichiers non tracés
+- [ ] `.gitignore` correct
+- [ ] `composer.lock` commité
+- [ ] `package-lock.json` commité
+
+### ✅ Configuration Production
+- [ ] `render.yaml` correct
+- [ ] `Procfile` présent
+- [ ] `bin/deploy.sh` exécutable
+- [ ] `.env.example` à jour
+- [ ] APP_DEBUG = false
+- [ ] APP_ENV = production
+
+### ✅ Base de Données
+- [ ] Migrations créées et testées
+- [ ] Pas d'erreurs migration
+- [ ] Foreign keys OK
+- [ ] Seeders prêts (si besoin)
+- [ ] Migration de roles complète
+- [ ] Migration de role_user complète
+
+### ✅ Sécurité
+- [ ] Pas de credentials en dur
+- [ ] Pas d'affichage de secrets
+- [ ] Passwords hashés (bcrypt)
+- [ ] HTTPS forcé
+- [ ] CSRF protection actif
+- [ ] Middleware d'authentification appliqué
+
+### ✅ Fonctionnalités Critiques
+- [ ] Authentification admin@gmail.com → rôle admin
+- [ ] Middleware admin protège /admin/*
+- [ ] Dashboard admin accessible
+- [ ] Menu "My Account" adapté au rôle
+- [ ] Tickets visibles et gérables
+- [ ] Charts fonctionnels
+
+## 🚀 Déploiement Render
+
+### Avant Render
+- [ ] Dernier commit poussé
+- [ ] Compte Render créé
+- [ ] GitHub connecté à Render
+
+### Sur Render Dashboard
+- [ ] Sélectionner Blueprint
+- [ ] Valider render.yaml
+- [ ] Attendre les logs de build
+- [ ] Vérifier le status = "running"
+
+### Variables d'Environnement
+- [ ] APP_ENV = production ✓
+- [ ] APP_DEBUG = false ✓
+- [ ] APP_KEY = généré ✓
+- [ ] DB_* = auto (depuis MySQL service) ✓
+- [ ] LOG_LEVEL = error ✓
+- [ ] SESSION_DRIVER = database ✓
+
+## ✔️ Tests Post-Déploiement Immédiats
+
+### Navigation & Accès
+- [ ] URL principale charge
+- [ ] Pas d'erreur 502/503/500
+- [ ] CSS et JS chargés
+- [ ] Images affichées
+- [ ] Responsive (mobile/desktop)
+
+### Authentification
+- [ ] Page `/login` accessible
+- [ ] Page `/register` accessible
+- [ ] Enregistrement avec `admin@gmail.com` crée admin
+- [ ] Login réussit
+- [ ] Logout fonctionne
+- [ ] Session persiste entre pages
+
+### Utilisateur Admin
+- [ ] Redirection `/admin/dashboard` OK
+- [ ] Dashboard affiche stats
+- [ ] Charts visibles et interactifs
+- [ ] Menu "My Account" → Admin Dashboard, Users, Tickets, Stats
+- [ ] Gestion des utilisateurs OK
+- [ ] Gestion des tickets OK
+- [ ] Pagination fonctionne
+
+### Utilisateur Simple
+- [ ] Dashboard user accessible
+- [ ] Pas d'accès à /admin
+- [ ] Menu "My Account" → Dashboard, My Tickets
+- [ ] Achat de tickets possible
+- [ ] Liste des tickets visible
+
+### Base de Données
+- [ ] Migrations s'exécutées
+- [ ] Utilisateurs créés avec succès
+- [ ] Rôles assignés correctement
+- [ ] Sessions stockées en DB
+- [ ] Pas d'erreur de connexion
+
+## 📊 Monitoring Post-Déploiement
+
+### Première Heure
+- [ ] Vérifier les logs pour erreurs
+- [ ] Tester toutes les routes principales
+- [ ] Tester login/logout/register
+- [ ] Vérifier les performances
+
+### Premières 24 Heures
+- [ ] Surveiller les erreurs 500
+- [ ] Monitorer les connexions DB
+- [ ] Vérifier les timeouts
+- [ ] Vérifier les migrations
+- [ ] Tester le cold start (redémarrage après inactivité)
+
+### Continue
+- [ ] Vérifier logs quotidiennement
+- [ ] Monitorer les performances
+- [ ] Vérifier l'uptime
+- [ ] Surveiller l'utilisation des ressources
+
+## 🆘 Dépannage Rapide
+
+### Erreur 502 Bad Gateway
+```
+→ Les logs disent quoi ?
+→ L'app démarre-t-elle ?
+→ Déclencher "Manual Deploy"
+```
+
+### App lente/timeout
+```
+→ Vérifier les logs pour les queries lentes
+→ Augmenter les limites si nécessaire
+→ Vérifier la pool de connexions DB
+```
+
+### DB connection failed
+```
+→ Vérifier les variables DB_*
+→ Vérifier que MySQL service est "running"
+→ Redéployer si nécessaire
+```
+
+### Migrations non exécutées
+```
+→ Vérifier les logs de build
+→ Chercher "Running migrations"
+→ Redéployer manuellement
+```
+
+## 📝 Checkliste Quotidienne Production
+
+### Matin
+- [ ] App accessible ?
+- [ ] Pas d'erreurs critiques dans les logs ?
+- [ ] DB en bon état ?
+
+### Midi
+- [ ] Performances OK ?
+- [ ] Connexions DB normales ?
+- [ ] Aucune erreur 500 ?
+
+### Soir
+- [ ] Aucun problème signalé ?
+- [ ] Logs vérifiés ?
+- [ ] Monitoring en place ?
+
+## ✅ Fonctionnalités à Tester
+
+| Fonctionnalité | Test | Status |
+|---|---|---|
+| Accueil public | Charger la page | ☐ |
+| Enregistrement | Créer un compte user | ☐ |
+| Login | Se connecter | ☐ |
+| Admin Detection | Créer avec admin@gmail.com | ☐ |
+| Dashboard User | Accès après login | ☐ |
+| Dashboard Admin | Accessible pour admins | ☐ |
+| Ticket View | Voir liste tickets | ☐ |
+| Stats | Charts affichés | ☐ |
+| User Mgmt | CRUD utilisateurs | ☐ |
+| Ticket Mgmt | CRUD tickets | ☐ |
+| Logout | Déconnexion | ☐ |
+
+## 🔄 En Cas de Problème
+
+### Diagnostic
+1. Vérifier les logs Render
+2. Vérifier l'état DB
+3. Vérifier les variables env
+4. Redéployer si nécessaire
+
+### Rollback d'Urgence
+```bash
+git revert HEAD  # Annuler le dernier commit
+git push origin main
+# Render redéploiera automatiquement
+```
+
+## 📞 Ressources
+
+- [Render Dashboard](https://dashboard.render.com)
+- [Render Docs](https://render.com/docs)
+- [Laravel Docs](https://laravel.com/docs)
+- [Logs Render](https://dashboard.render.com → ssdj-app → Logs)
+
+---
+
+**Checklist Version**: 2.0 (Production)
+**Date**: 25 Novembre 2025
+**Environnement**: Production sur Render
+**Status**: ✅ Ready to Deploy
 
 ### ✅ Models & Controllers
 - [ ] `app/Models/User.php` - Updated with ticket relationships
