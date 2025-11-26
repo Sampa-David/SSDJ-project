@@ -1,43 +1,67 @@
 #!/bin/bash
 set -e
 
-echo "🚀 SSDJ Deployment on Railway..."
-echo "================================"
+echo "🚀 SSDJ Railway Deployment..."
+echo "=============================="
 
-# Navigate to app directory
-cd /app || true
+# Get current working directory (Railway uses /workspace)
+APP_DIR=$(pwd)
+echo "📂 Working directory: $APP_DIR"
 
-# Update composer dependencies
+# 1. Install PHP dependencies
+echo ""
 echo "📦 Installing PHP dependencies..."
 composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
 
-# Generate APP_KEY if not exists
-if [ -z "$APP_KEY" ]; then
-  echo "🔑 Generating APP_KEY..."
-  php artisan key:generate --force
+# 2. Install Node dependencies and build assets
+echo ""
+echo "🎨 Building frontend assets..."
+if [ -f "package.json" ]; then
+    npm ci --omit=dev 2>/dev/null || npm install --omit=dev 2>/dev/null || true
+    npm run build 2>/dev/null || true
+else
+    echo "⚠️  package.json not found, skipping npm build"
 fi
 
-# Clear all caches
+# 3. Generate APP_KEY if not already set
+echo ""
+if [ -z "$APP_KEY" ]; then
+    echo "🔑 Generating APP_KEY..."
+    php artisan key:generate --force
+else
+    echo "✅ APP_KEY already set"
+fi
+
+# 4. Clear all caches (important for fresh deployment)
+echo ""
 echo "🧹 Clearing caches..."
 php artisan config:clear
 php artisan cache:clear
 php artisan view:clear
 php artisan route:clear
 
-# Run database migrations
-echo "📊 Running migrations..."
-php artisan migrate --force
-
-# Build frontend assets
-echo "🎨 Building assets..."
-npm install --production 2>/dev/null || echo "npm install skipped"
-npm run build 2>/dev/null || echo "npm build skipped"
-
-# Optimize for production
-echo "⚡ Optimizing application..."
+# 5. Optimize configuration for production
+echo ""
+echo "⚡ Optimizing for production..."
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 
+# 6. Run database migrations
+echo ""
+echo "📊 Running database migrations..."
+php artisan migrate --force
+
+# 7. Seed database (optional, only if needed)
+echo ""
+echo "🌱 Seeding database..."
+php artisan db:seed --force 2>/dev/null || echo "⚠️  Database seeding skipped"
+
+# 8. Set proper permissions
+echo ""
+echo "🔒 Setting permissions..."
+chmod -R 755 storage bootstrap/cache 2>/dev/null || true
+
+echo ""
 echo "✅ Deployment complete!"
-echo "🌐 Your app will be available at: https://ssdj.railway.app"
+echo "🌐 App is ready to start"
