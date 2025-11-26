@@ -35,10 +35,10 @@ fi
 # 4. Clear all caches (important for fresh deployment)
 echo ""
 echo "🧹 Clearing caches..."
-php artisan config:clear
-php artisan cache:clear
-php artisan view:clear
-php artisan route:clear
+php artisan config:clear || true
+php artisan cache:clear || true
+php artisan view:clear || true
+php artisan route:clear || true
 
 # 5. Optimize configuration for production
 echo ""
