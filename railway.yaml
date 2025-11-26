@@ -5,10 +5,10 @@ services:
       repo: Sampa-David/SSDJ-project
       branch: main
     buildCommand: bash ./bin/railway-deploy.sh
-    startCommand: vendor/bin/heroku-php-apache2 public/
+    startCommand: php -S 0.0.0.0:8080 -t public
     healthCheckUrl: /
     healthCheckInterval: 30
-    port: 80
+    port: 8080
     domains:
       - ssdj.railway.app
     variables:

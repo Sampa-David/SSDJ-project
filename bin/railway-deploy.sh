@@ -9,7 +9,7 @@ cd /app || true
 
 # Update composer dependencies
 echo "📦 Installing PHP dependencies..."
-composer install --no-interaction --prefer-dist --optimize-autoloader
+composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
 
 # Generate APP_KEY if not exists
 if [ -z "$APP_KEY" ]; then
