@@ -1,0 +1,36 @@
+services:
+  - name: ssdj-app
+    source:
+      type: github
+      repo: Sampa-David/SSDJ-project
+      branch: main
+    buildCommand: bash ./bin/railway-deploy.sh
+    startCommand: vendor/bin/heroku-php-apache2 public/
+    healthCheckUrl: /
+    healthCheckInterval: 30
+    port: 80
+    domains:
+      - ssdj.railway.app
+    variables:
+      APP_ENV: production
+      APP_DEBUG: "false"
+      APP_NAME: "SSDJ Event System"
+      LOG_CHANNEL: stack
+      LOG_LEVEL: error
+      SESSION_DRIVER: database
+      CACHE_DRIVER: database
+      QUEUE_CONNECTION: database
+      DB_CONNECTION: mysql
+
+  - name: ssdj-db
+    source:
+      type: mysql
+      version: "8.0"
+    volumes:
+      - name: db-data
+        mountPath: /var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ssdj
+      MYSQL_USER: ssdj_user
+      MYSQL_PASSWORD: ${DB_PASSWORD}
