@@ -50,12 +50,15 @@ php artisan view:cache
 # 6. Run database migrations
 echo ""
 echo "📊 Running database migrations..."
-php artisan migrate --force
+# Migrations will be run at startup, not during build
+# To avoid connection errors during build when DB might not be ready
+echo "⏳ Migrations will run at container startup"
 
 # 7. Seed database (optional, only if needed)
 echo ""
 echo "🌱 Seeding database..."
-php artisan db:seed --force 2>/dev/null || echo "⚠️  Database seeding skipped"
+# Skip seeding during build - will run at startup if needed
+echo "⏳ Database seeding will run at startup if needed"
 
 # 8. Set proper permissions
 echo ""
@@ -63,5 +66,5 @@ echo "🔒 Setting permissions..."
 chmod -R 755 storage bootstrap/cache 2>/dev/null || true
 
 echo ""
-echo "✅ Deployment complete!"
-echo "🌐 App is ready to start"
+echo "✅ Build complete!"
+echo "🌐 App will start and run migrations at startup"
