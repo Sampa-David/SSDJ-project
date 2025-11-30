@@ -9,4 +9,4 @@ php artisan migrate --force || echo "⚠️  Migrations already completed or ski
 
 # Start PHP server
 echo "🌐 Starting PHP server on 0.0.0.0:${PORT:-8080}..."
-exec php -S 0.0.0.0:${PORT:-8080} -t public
+exec php -S 0.0.0.0:${PORT:-8080} -t public 
