@@ -46,7 +46,7 @@
                     <hr class="my-4">
 
                     <p class="text-center mb-0">
-                        Don't have an account? <a href="{{ route('register') }}">Create one</a>
+                        Don't have an account? <a href="{{ route('register.email') }}">Create one</a>
                     </p>
                 </div>
             </div>
