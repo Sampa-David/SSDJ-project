@@ -49,29 +49,12 @@ Route::get('/contact', function () {
 })->name('contact');
 
 // ========================================
-// EMAIL VERIFICATION ROUTES (Guest Only)
-// ========================================
-
-Route::middleware('guest')->prefix('register')->name('register.')->group(function () {
-    // Step 1: Enter email
-    Route::get('/', [EmailVerificationController::class, 'showRegisterForm'])->name('email');
-    Route::post('/send-code', [EmailVerificationController::class, 'sendCode'])->name('send-code');
-    
-    // Step 2: Verify code and create account
-    Route::get('/verify', [EmailVerificationController::class, 'showCodeForm'])->name('verify');
-    Route::post('/verify-code', [EmailVerificationController::class, 'verifyCode'])->name('verify-code');
-    
-    // Resend code
-    Route::post('/resend-code', [EmailVerificationController::class, 'resendCode'])->name('resend-code');
-});
-
-// ========================================
 // AUTHENTICATION ROUTES (Guest Only)
 // ========================================
 
-// Legacy Registration (if still needed)
-Route::get('/register-old', [AuthController::class, 'showRegister'])->middleware('guest')->name('register-old');
-Route::post('/register-old', [AuthController::class, 'register'])->middleware('guest');
+// Registration - Simple form
+Route::get('/register', [AuthController::class, 'showRegister'])->middleware('guest')->name('register');
+Route::post('/register', [AuthController::class, 'register'])->middleware('guest');
 
 // Login
 Route::get('/login', [AuthController::class, 'showLogin'])->middleware('guest')->name('login');
