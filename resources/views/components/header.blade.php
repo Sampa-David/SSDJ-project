@@ -54,7 +54,7 @@
     @else
       <div style="display: flex; gap: 10px;">
         <a class="btn-getstarted" href="{{ route('login') }}" style="background: transparent; color: #667eea; border: 2px solid #667eea; padding: 8px 20px;">Login</a>
-        <a class="btn-getstarted" href="{{ route('register') }}">Register</a>
+        <a class="btn-getstarted" href="{{ route('register.email') }}">Register</a>
       </div>
     @endauth
 

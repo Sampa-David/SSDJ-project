@@ -7,18 +7,12 @@ echo "=============================="
 APP_DIR=$(pwd)
 echo "📂 Working directory: $APP_DIR"
 
-# Create .env.railway if it doesn't exist with Railway-specific overrides
-if [ ! -f ".env.railway" ]; then
+# Check if we're on Railway (has .env.railway)
+if [ -f ".env.railway" ]; then
     echo ""
-    echo "📝 Creating .env.railway with Railway overrides..."
-    cat > .env.railway << 'EOF'
-APP_ENV=production
-APP_DEBUG=false
-DB_HOST=mysql
-TRUSTED_PROXIES=*
-TRUSTED_HOSTS=*
-FORCE_HTTPS=true
-EOF
+    echo "🚀 Deploying to Railway - Loading .env.railway..."
+    cp .env.railway .env
+    echo "✅ Using Railway environment configuration"
 fi
 
 # 1. Install PHP dependencies
