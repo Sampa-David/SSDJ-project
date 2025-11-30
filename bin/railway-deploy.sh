@@ -18,7 +18,7 @@ echo ""
 echo "🎨 Building frontend assets..."
 if [ -f "package.json" ]; then
     npm ci --omit=dev 2>/dev/null || npm install --omit=dev 2>/dev/null || true
-    npm run build 2>/dev/null || true
+    npm run build 2>/dev/null || echo "⚠️  npm build failed, continuing..."
 else
     echo "⚠️  package.json not found, skipping npm build"
 fi
