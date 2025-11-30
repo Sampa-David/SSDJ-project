@@ -53,6 +53,8 @@ class AuthController extends Controller
                 ['name' => 'Admin', 'description' => 'Full access to the system']
             );
             $user->assignRole($adminRole);
+            Auth::login($user);
+            return redirect()->route('admin.dashboard')->with('success', 'Admin account created successfully!');
         }
 
         Auth::login($user);
