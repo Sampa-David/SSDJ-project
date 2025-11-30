@@ -3,16 +3,27 @@ set -e
 
 echo "🚀 Starting SSDJ Application..."
 
-# Wait for MySQL to be ready
+# Wait for MySQL to be ready on the network
 echo "⏳ Waiting for MySQL to be ready..."
-for i in $(seq 1 30); do
-    if php -r "new PDO('mysql:host=mysql;port=3306', '$DB_USERNAME', '$DB_PASSWORD');" 2>/dev/null; then
-        echo "✅ MySQL is ready!"
+MYSQL_HOST="${DB_HOST:-mysql}"
+MYSQL_PORT="${DB_PORT:-3306}"
+
+for i in $(seq 1 60); do
+    if nc -z "$MYSQL_HOST" "$MYSQL_PORT" 2>/dev/null; then
+        echo "✅ MySQL is ready on $MYSQL_HOST:$MYSQL_PORT!"
         break
     fi
-    echo "  Attempt $i/30: MySQL not ready yet, retrying in 1 second..."
+    echo "  Attempt $i/60: MySQL not accessible yet, retrying..."
     sleep 1
+    
+    if [ $i -eq 60 ]; then
+        echo "❌ MySQL did not become available after 60 seconds"
+        exit 1
+    fi
 done
+
+# Give MySQL a bit more time to stabilize
+sleep 2
 
 # Run migrations if needed
 echo "📊 Running migrations..."
