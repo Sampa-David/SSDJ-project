@@ -82,7 +82,7 @@ class User extends Authenticatable
         if (is_string($role)) {
             $role = Role::where('slug', $role)->firstOrFail();
         }
-        $this->roles()->syncWithoutDetaching($role);
+        $this->roles()->attach($role);
     }
 
     /**
