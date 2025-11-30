@@ -82,6 +82,18 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
             
+            // Check if user is admin and redirect accordingly
+            $user = Auth::user();
+            if ($user) {
+                try {
+                    if ($user->hasRole('admin')) {
+                        return redirect()->route('admin.dashboard')->with('success', 'Welcome back, Admin!');
+                    }
+                } catch (\Exception $e) {
+                    // If hasRole fails, just redirect to regular dashboard
+                }
+            }
+            
             return redirect()->route('dashboard')->with('success', 'Welcome back!');
         }
 
