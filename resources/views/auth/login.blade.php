@@ -1,4 +1,4 @@
-@extends('layouts.app')
+9@extends('layouts.app')
 
 @section('content')
 <div class="container py-5">
@@ -46,7 +46,7 @@
                     <hr class="my-4">
 
                     <p class="text-center mb-0">
-                        Don't have an account? <a href="{{ route('register.email') }}">Create one</a>
+                        Don't have an account? <a href="{{ route('register') }}">Create one</a>
                     </p>
                 </div>
             </div>
