@@ -1,5 +1,4 @@
 #!/bin/sh
-set -e
 
 echo "🚀 SSDJ Railway Deployment..."
 echo "=============================="
@@ -7,6 +6,20 @@ echo "=============================="
 # Get current working directory (Railway uses /workspace)
 APP_DIR=$(pwd)
 echo "📂 Working directory: $APP_DIR"
+
+# Create .env.railway if it doesn't exist with Railway-specific overrides
+if [ ! -f ".env.railway" ]; then
+    echo ""
+    echo "📝 Creating .env.railway with Railway overrides..."
+    cat > .env.railway << 'EOF'
+APP_ENV=production
+APP_DEBUG=false
+DB_HOST=mysql
+TRUSTED_PROXIES=*
+TRUSTED_HOSTS=*
+FORCE_HTTPS=true
+EOF
+fi
 
 # 1. Install PHP dependencies
 echo ""
