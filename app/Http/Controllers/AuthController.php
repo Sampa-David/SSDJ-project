@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -44,6 +45,15 @@ class AuthController extends Controller
             'company' => $request->company,
             'email_verified_at' => now(), // Mark email as verified immediately
         ]);
+
+        // Check if email is admin email and assign admin role
+        if ($request->email === 'admin@gmail.com') {
+            $adminRole = Role::firstOrCreate(
+                ['slug' => 'admin'],
+                ['name' => 'Admin', 'description' => 'Full access to the system']
+            );
+            $user->assignRole($adminRole);
+        }
 
         Auth::login($user);
         return redirect()->route('dashboard')->with('success', 'Account created successfully!');
