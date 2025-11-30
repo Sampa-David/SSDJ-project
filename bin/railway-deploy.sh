@@ -50,9 +50,7 @@ php artisan view:cache
 # 6. Run database migrations
 echo ""
 echo "📊 Running database migrations..."
-# Migrations will be run at startup, not during build
-# To avoid connection errors during build when DB might not be ready
-echo "⏳ Migrations will run at container startup"
+php artisan migrate --force --no-interaction || true
 
 # 7. Seed database (optional, only if needed)
 echo ""
