@@ -41,7 +41,7 @@ class EmailVerificationController extends Controller
                 ->with('error', $result['message']);
         }
 
-        return redirect()->route('verify.code')
+        return redirect()->route('register.verify')
             ->with('success', $result['message'])
             ->with('email', $validated['email'])
             ->with('verification_id', $result['verification_id']);
