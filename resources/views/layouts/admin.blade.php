@@ -292,11 +292,51 @@
             border: none;
         }
 
+        /* MENU TOGGLE BUTTON */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #2c3e50;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 8px 12px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .sidebar-overlay.show {
+            display: block;
+        }
+
         /* RESPONSIVE */
         @media (max-width: 768px) {
+            :root {
+                --sidebar-width: 280px;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
             .sidebar {
                 transform: translateX(-100%);
                 transition: transform 0.3s ease;
+                z-index: 1001;
             }
 
             .sidebar.show {
@@ -313,6 +353,44 @@
 
             .navbar-title h1 {
                 font-size: 1.3rem;
+            }
+
+            .navbar-right {
+                gap: 10px;
+            }
+
+            .user-menu {
+                padding: 6px 10px;
+                font-size: 0.9rem;
+            }
+
+            .user-avatar {
+                width: 30px;
+                height: 30px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar-title h1 {
+                font-size: 1.1rem;
+            }
+
+            .page-content {
+                padding: 15px;
+            }
+
+            .stat-card {
+                padding: 15px;
+            }
+
+            .card-header {
+                padding: 12px 15px;
+            }
+
+            .top-navbar {
+                padding: 12px 15px;
+                gap: 10px;
             }
         }
 
@@ -338,6 +416,9 @@
 </head>
 <body>
     <div class="admin-wrapper">
+        <!-- SIDEBAR OVERLAY (Mobile) -->
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
         <!-- SIDEBAR -->
         <aside class="sidebar">
             <div class="sidebar-header">
@@ -426,8 +507,13 @@
         <div class="main-content">
             <!-- TOP NAVBAR -->
             <nav class="top-navbar">
-                <div class="navbar-title">
-                    <h1>@yield('page-title', 'Dashboard')</h1>
+                <div class="d-flex align-items-center gap-3">
+                    <button class="menu-toggle" id="menuToggle" title="Toggle Menu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="navbar-title">
+                        <h1>@yield('page-title', 'Dashboard')</h1>
+                    </div>
                 </div>
                 <div class="navbar-right">
                     <div class="user-menu">
@@ -470,6 +556,41 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.querySelector('.sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        // Toggle menu
+        menuToggle?.addEventListener('click', function() {
+            sidebar.classList.toggle('show');
+            sidebarOverlay.classList.toggle('show');
+        });
+
+        // Close menu when clicking overlay
+        sidebarOverlay?.addEventListener('click', function() {
+            sidebar.classList.remove('show');
+            sidebarOverlay.classList.remove('show');
+        });
+
+        // Close menu when clicking on a link
+        document.querySelectorAll('.sidebar-menu a').forEach(link => {
+            link.addEventListener('click', function() {
+                sidebar.classList.remove('show');
+                sidebarOverlay.classList.remove('show');
+            });
+        });
+
+        // Close menu on window resize (if resizing to larger screen)
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('show');
+                sidebarOverlay.classList.remove('show');
+            }
+        });
+    </script>
     @stack('scripts')
 </body>
 </html>
