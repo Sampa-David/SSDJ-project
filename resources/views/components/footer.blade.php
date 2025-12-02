@@ -19,7 +19,7 @@
         <h4>Useful Links</h4>
         <ul>
           <li><a href="{{ route('home') }}">Home</a></li>
-          <li><a href="{{ route('about')#about }}">About us</a></li>
+          <li><a href="#about">About us</a></li>
           <li><a href="{{ route('schedule') }}">Schedule</a></li>
           <li><a href="{{ route('terms') }}">Terms of service</a></li>
           <li><a href="{{ route('privacy') }}">Privacy policy</a></li>
