@@ -51,7 +51,7 @@
       <div class="col-lg-6 mb-4 mb-lg-0">
         <div class="content">
           <h2 data-aos="fade-up" data-aos-delay="200">Shaping the Future of Digital Innovation</h2>
-          <p data-aos="fade-up" data-aos-delay="300">Consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+          <p data-aos="fade-up" data-aos-delay="300">🎉🎉🎉🎊🥳</p>
 
           <div class="stats-grid" data-aos="fade-up" data-aos-delay="500">
             <div class="stat-item">
