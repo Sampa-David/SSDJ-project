@@ -16,15 +16,15 @@
 
         <div class="event-details mb-4">
           <div class="detail-item" data-aos="fade-up" data-aos-delay="300">
-            <i class="bi bi-calendar-event"></i>
+            
             <span></span>
           </div>
           <div class="detail-item" data-aos="fade-up" data-aos-delay="350">
-            <i class="bi bi-geo-alt"></i>
+            
             <span></span>
           </div>
           <div class="detail-item" data-aos="fade-up" data-aos-delay="400">
-            <i class="bi bi-people"></i>
+           
             <span></span>
           </div>
         </div>
