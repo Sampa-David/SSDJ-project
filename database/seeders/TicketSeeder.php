@@ -15,6 +15,12 @@ class TicketSeeder extends Seeder
      */
     public function run(): void
     {
+        // Check if seeding has already been done
+        if (User::count() > 0) {
+            $this->command->info('ℹ️  Database already seeded. Skipping TicketSeeder to avoid duplicates.');
+            return;
+        }
+
         // Define ticket types and their prices
         $ticketTypes = [
             'standard' => 150,
@@ -25,6 +31,8 @@ class TicketSeeder extends Seeder
         ];
 
         $ticketStatuses = ['active', 'cancelled', 'used'];
+
+        $this->command->info('🌱 Starting to seed 500 users with tickets...');
 
         // Create 500 users with tickets
         for ($i = 1; $i <= 500; $i++) {
@@ -64,11 +72,11 @@ class TicketSeeder extends Seeder
 
             // Print progress
             if ($i % 100 == 0) {
-                $this->command->info("Created {$i} users with tickets...");
+                $this->command->info("✓ Created {$i} users with tickets...");
             }
         }
 
-        $this->command->info('✓ Successfully seeded 500 users with various tickets!');
+        $this->command->info('✅ Successfully seeded 500 users with various tickets!');
     }
 }
 

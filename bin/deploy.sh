@@ -28,6 +28,10 @@ php artisan route:clear
 echo "📊 Running migrations..."
 php artisan migrate --force
 
+# Run database seeders
+echo "🌱 Seeding database..."
+php artisan db:seed --force
+
 # Build frontend assets
 echo "🎨 Building assets..."
 npm install --production
