@@ -16,16 +16,16 @@
 
         <div class="event-details mb-4">
           <div class="detail-item" data-aos="fade-up" data-aos-delay="300">
-            <i class="bi bi-calendar-event"></i>
-            <span>March 15-17, 2026</span>
+            
+            <span></span>
           </div>
           <div class="detail-item" data-aos="fade-up" data-aos-delay="350">
-            <i class="bi bi-geo-alt"></i>
-            <span>San Francisco Convention Center</span>
+            
+            <span></span>
           </div>
           <div class="detail-item" data-aos="fade-up" data-aos-delay="400">
-            <i class="bi bi-people"></i>
-            <span>5000+ Attendees Expected</span>
+           
+            <span></span>
           </div>
         </div>
 
@@ -51,7 +51,7 @@
       <div class="col-lg-6 mb-4 mb-lg-0">
         <div class="content">
           <h2 data-aos="fade-up" data-aos-delay="200">Shaping the Future of Digital Innovation</h2>
-          <p data-aos="fade-up" data-aos-delay="300">Consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+         <center> <p data-aos="fade-up" data-aos-delay="300">🎉🎉🎉🎊🥳</p></center>
 
           <div class="stats-grid" data-aos="fade-up" data-aos-delay="500">
             <div class="stat-item">
