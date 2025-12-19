@@ -92,13 +92,13 @@ Route::middleware('auth')->group(function () {
     // Purchase confirmation
     Route::get('/tickets/confirmation/{ticket}', [TicketController::class, 'confirmation'])->name('tickets.confirmation');
     
-    // Events Management
-    Route::resource('events', eventController::class);
-    
-    // Event Publishing Payment Routes
+    // Event Publishing Payment Routes (Must be before Route::resource to avoid conflicts)
     Route::get('/events/payment', [EventPaymentController::class, 'showPaymentPage'])->name('events.payment');
     Route::post('/events/payment/process', [EventPaymentController::class, 'processPayment'])->name('events.process-payment');
     Route::get('/events/payment-confirmation/{publishingRight}', [EventPaymentController::class, 'confirmation'])->name('events.payment-confirmation');
+    
+    // Events Management (Must be after specific payment routes)
+    Route::resource('events', eventController::class);
 });
 
 // ========================================
