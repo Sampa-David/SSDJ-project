@@ -1,17 +1,17 @@
-@extends('layouts.app')
 
-@section('title', $event->name . ' - Eventix')
 
-@section('content')
+<?php $__env->startSection('title', $event->name . ' - Eventix'); ?>
+
+<?php $__env->startSection('content'); ?>
 
 <div class="page-title" data-aos="fade">
     <div class="container d-lg-flex justify-content-between align-items-center">
-        <h1 class="mb-2 mb-lg-0">{{ $event->name }}</h1>
+        <h1 class="mb-2 mb-lg-0"><?php echo e($event->name); ?></h1>
         <nav class="breadcrumbs">
             <ol>
-                <li><a href="{{ route('home') }}">Home</a></li>
-                <li><a href="{{ route('events.public.list') }}">Events</a></li>
-                <li class="current">{{ $event->name }}</li>
+                <li><a href="<?php echo e(route('home')); ?>">Home</a></li>
+                <li><a href="<?php echo e(route('events.public.list')); ?>">Events</a></li>
+                <li class="current"><?php echo e($event->name); ?></li>
             </ol>
         </nav>
     </div>
@@ -25,23 +25,26 @@
                 <!-- Event Header Card -->
                 <div class="card shadow-sm border-0 mb-4" style="border-radius: 10px; overflow: hidden;">
                     <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px;">
-                        <h2 class="mb-3">{{ $event->name }}</h2>
+                        <h2 class="mb-3"><?php echo e($event->name); ?></h2>
                         
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <p class="mb-2">
                                     <i class="bi bi-calendar3"></i>
-                                    <strong>Date:</strong> {{ $event->date_event->format('l, F d, Y') }}
+                                    <strong>Date:</strong> <?php echo e($event->date_event->format('l, F d, Y')); ?>
+
                                 </p>
                                 <p class="mb-2">
                                     <i class="bi bi-clock"></i>
-                                    <strong>Expiry At :</strong> {{$event->date_event?->format('H:i:s')}}
+                                    <strong>Expiry At :</strong> <?php echo e($event->date_event?->format('H:i:s')); ?>
+
                                 </p>
                             </div>
                             <div class="col-md-6">
                                 <p class="mb-2">
                                     <i class="bi bi-geo-alt"></i>
-                                    <strong>Location:</strong> {{ $event->location }}
+                                    <strong>Location:</strong> <?php echo e($event->location); ?>
+
                                 </p>
                                 <p class="mb-2">
                                     <i class="bi bi-globe"></i>
@@ -58,23 +61,23 @@
                         <h5 class="mb-0">About This Event</h5>
                     </div>
                     <div class="card-body">
-                        <p class="lead">{{ $event->description }}</p>
+                        <p class="lead"><?php echo e($event->description); ?></p>
                         
-                        @if($event->package_type)
+                        <?php if($event->package_type): ?>
                             <hr>
                             <div class="row">
                                 <div class="col-md-6">
                                     <h6 class="text-muted">Event Package</h6>
-                                    <p><strong>{{ ucfirst($event->package_type) }}</strong></p>
+                                    <p><strong><?php echo e(ucfirst($event->package_type)); ?></strong></p>
                                 </div>
-                                @if($event->price)
+                                <?php if($event->price): ?>
                                     <div class="col-md-6">
                                         <h6 class="text-muted">Entry Price</h6>
-                                        <p><strong>${{ number_format($event->price, 2) }}</strong></p>
+                                        <p><strong>$<?php echo e(number_format($event->price, 2)); ?></strong></p>
                                     </div>
-                                @endif
+                                <?php endif; ?>
                             </div>
-                        @endif
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -90,11 +93,12 @@
                         <div style="font-size: 3rem; color: #667eea; margin-bottom: 10px;">
                             <i class="bi bi-person-circle"></i>
                         </div>
-                        <h6 class="mb-2">{{ $event->user->name ?? 'Unknown' }}</h6>
-                        <p class="text-muted small">{{ $event->user->email ?? '' }}</p>
+                        <h6 class="mb-2"><?php echo e($event->user->name ?? 'Unknown'); ?></h6>
+                        <p class="text-muted small"><?php echo e($event->user->email ?? ''); ?></p>
                         <p class="text-muted small">
                             <i class="bi bi-building"></i>
-                            {{ $event->user->company ?? 'Event Organizer' }}
+                            <?php echo e($event->user->company ?? 'Event Organizer'); ?>
+
                         </p>
                     </div>
                 </div>
@@ -114,17 +118,17 @@
                             </div>
                             <div class="col-6">
                                 <small class="text-muted">Created</small>
-                                <p class="mb-0">{{ $event->created_at->format('M d, Y') }}</p>
+                                <p class="mb-0"><?php echo e($event->created_at->format('M d, Y')); ?></p>
                             </div>
                         </div>
-                        @if($event->expires_at)
+                        <?php if($event->expires_at): ?>
                             <div class="row">
                                 <div class="col-12">
                                     <small class="text-muted">Expires</small>
-                                    <p class="mb-0">{{ $event->expires_at->format('M d, Y') }}</p>
+                                    <p class="mb-0"><?php echo e($event->expires_at->format('M d, Y')); ?></p>
                                 </div>
                             </div>
-                        @endif
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -132,10 +136,10 @@
                 <div class="card shadow-sm border-0" style="border-radius: 10px;">
                     <div class="card-body">
                         <div class="d-grid gap-2">
-                            <a href="{{ route('buy-tickets') }}" class="btn btn-primary btn-lg">
+                            <a href="<?php echo e(route('buy-tickets')); ?>" class="btn btn-primary btn-lg">
                                 <i class="bi bi-ticket-perforated"></i> Get Tickets
                             </a>
-                            <a href="{{ route('events.public.list') }}" class="btn btn-outline-secondary">
+                            <a href="<?php echo e(route('events.public.list')); ?>" class="btn btn-outline-secondary">
                                 <i class="bi bi-arrow-left"></i> Back to Events
                             </a>
                         </div>
@@ -208,4 +212,6 @@
     }
 </style>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH S:\php(Laravel)\S²DJ\resources\views/events/public-show.blade.php ENDPATH**/ ?>

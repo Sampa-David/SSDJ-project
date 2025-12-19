@@ -1,6 +1,6 @@
-@extends('layouts.admin')
 
-@section('content')
+
+<?php $__env->startSection('content'); ?>
 <div class="admin-page">
     <div class="page-header">
         <div class="header-content">
@@ -10,31 +10,33 @@
             </h1>
             <p class="page-subtitle">Manage all events in your system</p>
         </div>
-        <a href="{{ route('admin.events.create') }}" class="btn btn-primary">
+        <a href="<?php echo e(route('admin.events.create')); ?>" class="btn btn-primary">
             <i class="fas fa-plus"></i>
             Create Event
         </a>
     </div>
 
-    @if(session('success'))
+    <?php if(session('success')): ?>
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         <i class="fas fa-check-circle"></i>
-        {{ session('success') }}
+        <?php echo e(session('success')); ?>
+
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    @endif
+    <?php endif; ?>
 
-    @if(session('error'))
+    <?php if(session('error')): ?>
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
         <i class="fas fa-exclamation-circle"></i>
-        {{ session('error') }}
+        <?php echo e(session('error')); ?>
+
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    @endif
+    <?php endif; ?>
 
     <div class="card">
         <div class="card-header">
@@ -55,47 +57,53 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($events as $event)
+                    <?php $__empty_1 = true; $__currentLoopData = $events; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $event): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                     <tr>
                         <td>
-                            <strong>{{ $event->name }}</strong>
+                            <strong><?php echo e($event->name); ?></strong>
                         </td>
                         <td>
-                            {{ $event->user->name ?? 'Unknown' }}
+                            <?php echo e($event->user->name ?? 'Unknown'); ?>
+
                         </td>
                         <td>
-                            {{ $event->date_event ? $event->date_event->format('M d, Y') : 'N/A' }}
+                            <?php echo e($event->date_event ? $event->date_event->format('M d, Y') : 'N/A'); ?>
+
                         </td>
                         <td>
                             <i class="fas fa-map-marker-alt"></i>
-                            {{ $event->location ?? 'N/A' }}
+                            <?php echo e($event->location ?? 'N/A'); ?>
+
                         </td>
                         <td>
-                            <span class="badge badge-{{ $event->visibility === 'public' ? 'success' : ($event->visibility === 'friends' ? 'info' : 'secondary') }}">
-                                <i class="fas fa-{{ $event->visibility === 'public' ? 'globe' : ($event->visibility === 'friends' ? 'users' : 'lock') }}"></i>
-                                {{ ucfirst($event->visibility) }}
+                            <span class="badge badge-<?php echo e($event->visibility === 'public' ? 'success' : ($event->visibility === 'friends' ? 'info' : 'secondary')); ?>">
+                                <i class="fas fa-<?php echo e($event->visibility === 'public' ? 'globe' : ($event->visibility === 'friends' ? 'users' : 'lock')); ?>"></i>
+                                <?php echo e(ucfirst($event->visibility)); ?>
+
                             </span>
                         </td>
                         <td>
-                            <span class="badge badge-{{ $event->status === 'published' ? 'success' : 'warning' }}">
-                                {{ ucfirst($event->status) }}
+                            <span class="badge badge-<?php echo e($event->status === 'published' ? 'success' : 'warning'); ?>">
+                                <?php echo e(ucfirst($event->status)); ?>
+
                             </span>
                         </td>
                         <td>
-                            @if($event->date_event)
-                                {{ $event->date_event->format('M d, Y') }}
-                            @else
+                            <?php if($event->date_event): ?>
+                                <?php echo e($event->date_event->format('M d, Y')); ?>
+
+                            <?php else: ?>
                                 <span class="text-muted">Never</span>
-                            @endif
+                            <?php endif; ?>
                         </td>
                         <td>
                             <div class="action-buttons">
-                                <a href="{{ route('admin.events.edit', $event) }}" class="btn btn-sm btn-info" title="Edit">
+                                <a href="<?php echo e(route('admin.events.edit', $event)); ?>" class="btn btn-sm btn-info" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <form action="{{ route('admin.events.destroy', $event) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this event?');">
-                                    @csrf
-                                    @method('DELETE')
+                                <form action="<?php echo e(route('admin.events.destroy', $event)); ?>" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this event?');">
+                                    <?php echo csrf_field(); ?>
+                                    <?php echo method_field('DELETE'); ?>
                                     <button type="submit" class="btn btn-sm btn-danger" title="Delete">
                                         <i class="fas fa-trash"></i>
                                     </button>
@@ -103,21 +111,22 @@
                             </div>
                         </td>
                     </tr>
-                    @empty
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                     <tr>
                         <td colspan="8" class="text-center py-4">
-                            <p class="text-muted mb-0">No events found. <a href="{{ route('admin.events.create') }}">Create one now</a></p>
+                            <p class="text-muted mb-0">No events found. <a href="<?php echo e(route('admin.events.create')); ?>">Create one now</a></p>
                         </td>
                     </tr>
-                    @endforelse
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
-        @if($events->hasPages())
+        <?php if($events->hasPages()): ?>
         <div class="card-footer">
-            {{ $events->links('pagination::bootstrap-4') }}
+            <?php echo e($events->links('pagination::bootstrap-4')); ?>
+
         </div>
-        @endif
+        <?php endif; ?>
     </div>
 </div>
 
@@ -131,4 +140,6 @@
     display: inline;
 }
 </style>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH S:\php(Laravel)\S²DJ\resources\views/admin/events/index.blade.php ENDPATH**/ ?>

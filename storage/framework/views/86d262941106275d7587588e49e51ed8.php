@@ -1,8 +1,8 @@
-@extends('layouts.app')
 
-@section('title', 'My Events - Eventix')
 
-@section('content')
+<?php $__env->startSection('title', 'My Events - Eventix'); ?>
+
+<?php $__env->startSection('content'); ?>
 
 <div class="container-fluid py-5" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh;">
     <div class="container">
@@ -11,89 +11,91 @@
             <div class="col-lg-12">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h2>My Events</h2>
-                    <a href="{{ route('events.payment') }}" class="btn btn-primary">
+                    <a href="<?php echo e(route('events.payment')); ?>" class="btn btn-primary">
                         <i class="fas fa-plus"></i> Create New Event
                     </a>
                 </div>
             </div>
         </div>
 
-        @if (session('success'))
+        <?php if(session('success')): ?>
             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
+                <?php echo e(session('success')); ?>
+
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
-        @endif
+        <?php endif; ?>
 
-        @if ($events->count() > 0)
+        <?php if($events->count() > 0): ?>
             <div class="row">
-                @foreach ($events as $event)
+                <?php $__currentLoopData = $events; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $event): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                     <div class="col-lg-6 mb-4">
                         <div class="card shadow-sm border-0 h-100">
                             <div class="card-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
                                 <div class="d-flex justify-content-between align-items-start">
                                     <div>
-                                        <h5 class="mb-1">{{ $event->name }}</h5>
+                                        <h5 class="mb-1"><?php echo e($event->name); ?></h5>
                                         <small class="d-block">
-                                            <i class="fas fa-calendar"></i> {{ $event->date_event->format('M d, Y') }} | 
-                                            <i class="fas fa-map-marker-alt"></i> {{ $event->location }}
+                                            <i class="fas fa-calendar"></i> <?php echo e($event->date_event->format('M d, Y')); ?> | 
+                                            <i class="fas fa-map-marker-alt"></i> <?php echo e($event->location); ?>
+
                                         </small>
                                     </div>
                                     <div>
-                                        @if($event->status === 'published')
+                                        <?php if($event->status === 'published'): ?>
                                             <span class="badge bg-success">Published</span>
-                                        @elseif($event->status === 'expired')
+                                        <?php elseif($event->status === 'expired'): ?>
                                             <span class="badge bg-danger">Expired</span>
-                                        @else
-                                            <span class="badge bg-warning">{{ ucfirst($event->status) }}</span>
-                                        @endif
+                                        <?php else: ?>
+                                            <span class="badge bg-warning"><?php echo e(ucfirst($event->status)); ?></span>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-body">
-                                <p class="card-text text-muted mb-3">{{ Str::limit($event->description, 100) }}</p>
+                                <p class="card-text text-muted mb-3"><?php echo e(Str::limit($event->description, 100)); ?></p>
                                 <div class="row mb-3 pb-3 border-bottom">
                                     <div class="col-6">
                                         <small class="text-muted">Package</small>
-                                        <p class="mb-0"><strong>{{ ucfirst($event->package_type) }}</strong></p>
+                                        <p class="mb-0"><strong><?php echo e(ucfirst($event->package_type)); ?></strong></p>
                                     </div>
                                     <div class="col-6">
                                         <small class="text-muted">Price</small>
-                                        <p class="mb-0"><strong>${{ number_format($event->price, 2) }}</strong></p>
+                                        <p class="mb-0"><strong>$<?php echo e(number_format($event->price, 2)); ?></strong></p>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-6">
                                         <small class="text-muted">Visibility</small>
                                         <p class="mb-0">
-                                            @if($event->visibility === 'public')
+                                            <?php if($event->visibility === 'public'): ?>
                                                 <span class="badge bg-info">Public</span>
-                                            @elseif($event->visibility === 'friends')
+                                            <?php elseif($event->visibility === 'friends'): ?>
                                                 <span class="badge bg-warning">Friends</span>
-                                            @else
+                                            <?php else: ?>
                                                 <span class="badge bg-secondary">Private</span>
-                                            @endif
+                                            <?php endif; ?>
                                         </p>
                                     </div>
                                     <div class="col-6">
                                         <small class="text-muted">Promotion Until</small>
-                                        <p class="mb-0">{{ $event->date_event?->format('Y-m-d\ H:i:s') }}</p>
+                                        <p class="mb-0"><?php echo e($event->date_event?->format('Y-m-d\ H:i:s')); ?></p>
                                     </div>
                                 </div>
                             </div>
                             <div class="card-footer bg-light">
                                 <div class="d-flex gap-2">
-                                    <a href="{{ route('events.show', $event->id) }}" class="btn btn-sm btn-outline-primary">
+                                    <a href="<?php echo e(route('events.show', $event->id)); ?>" class="btn btn-sm btn-outline-primary">
                                         <i class="fas fa-eye"></i> View
                                     </a>
-                                    @if($event->status === 'published')
-                                        <a href="{{ route('events.edit', $event->id) }}" class="btn btn-sm btn-outline-warning">
+                                    <?php if($event->status === 'published'): ?>
+                                        <a href="<?php echo e(route('events.edit', $event->id)); ?>" class="btn btn-sm btn-outline-warning">
                                             <i class="fas fa-edit"></i> Edit
                                         </a>
-                                    @endif
-                                    <form action="{{ route('events.destroy', $event->id) }}" method="POST" style="display: inline;">
-                                        @csrf
-                                        @method('DELETE')
+                                    <?php endif; ?>
+                                    <form action="<?php echo e(route('events.destroy', $event->id)); ?>" method="POST" style="display: inline;">
+                                        <?php echo csrf_field(); ?>
+                                        <?php echo method_field('DELETE'); ?>
                                         <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure?')">
                                             <i class="fas fa-trash"></i> Delete
                                         </button>
@@ -102,26 +104,29 @@
                             </div>
                         </div>
                     </div>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
 
             <!-- Pagination -->
             <div class="d-flex justify-content-center mt-4">
-                {{ $events->links() }}
+                <?php echo e($events->links()); ?>
+
             </div>
-        @else
+        <?php else: ?>
             <div class="card border-0 shadow-sm">
                 <div class="card-body text-center py-5">
                     <div style="font-size: 3rem; margin-bottom: 20px;">📅</div>
                     <h5 class="card-title">No Events Yet</h5>
                     <p class="card-text text-muted mb-4">You haven't created any events yet. Create your first event and get it published!</p>
-                    <a href="{{ route('events.payment') }}" class="btn btn-primary btn-lg">
+                    <a href="<?php echo e(route('events.payment')); ?>" class="btn btn-primary btn-lg">
                         <i class="fas fa-plus"></i> Create Your First Event
                     </a>
                 </div>
             </div>
-        @endif
+        <?php endif; ?>
     </div>
 </div>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH S:\php(Laravel)\S²DJ\resources\views/events/index.blade.php ENDPATH**/ ?>

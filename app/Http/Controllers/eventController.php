@@ -21,20 +21,62 @@ class eventController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource (redirects to payment)
+     * Show the form for creating a new resource
      */
     public function create()
     {
-        return redirect()->route('events.payment');
+        // Check if user has active publishing rights
+        if (!Auth::user()->hasActivePublishingRights()) {
+            return redirect()->route('events.payment')
+                ->with('message', 'You need to purchase publishing rights to create events.');
+        }
+
+        return view('events.create');
     }
 
     /**
-     * Store a newly created resource in storage (handled by EventPaymentController)
+     * Store a newly created resource in storage
      */
     public function store(Request $request)
     {
-        // This is now handled by EventPaymentController::processPayment
-        return redirect()->route('events.payment');
+        // Check if user has active publishing rights
+        if (!Auth::user()->hasActivePublishingRights()) {
+            return redirect()->route('events.payment')
+                ->with('error', 'You need active publishing rights to create events.');
+        }
+
+        // Validate request
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|min:10',
+            'date_event' => 'required|date|after:today',
+            'location' => 'required|string|max:255',
+            'visibility' => 'required|in:public,private,friends',
+            'package_type' => 'nullable|string',
+        ]);
+
+        try {
+            // Create event
+            $event = Event::create([
+                'user_id' => Auth::id(),
+                'name' => $request->name,
+                'description' => $request->description,
+                'date_event' => $request->date_event,
+                'location' => $request->location,
+                'visibility' => $request->visibility,
+                'status' => $request->publish_immediately ? 'published' : 'draft',
+                'published_at' => $request->publish_immediately ? now() : null,
+                'package_type' => $request->package_type,
+                'price' => 0,
+                'payment_id' => null,
+            ]);
+
+            return redirect()->route('events.show', $event)
+                ->with('success', 'Event created successfully!');
+        } catch (\Exception $e) {
+            return back()->withInput()
+                ->withErrors(['error' => 'Error creating event: ' . $e->getMessage()]);
+        }
     }
 
     /**
