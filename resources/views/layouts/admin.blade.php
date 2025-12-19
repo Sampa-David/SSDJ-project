@@ -452,6 +452,12 @@
                         <span>Tickets</span>
                     </a>
                 </li>
+                <li>
+                    <a href="{{ route('admin.events.index') }}" class="@if(Route::currentRouteName() === 'admin.events.index' || Route::currentRouteName() === 'admin.events.create' || Route::currentRouteName() === 'admin.events.edit') active @endif">
+                        <i class="fas fa-calendar"></i>
+                        <span>Events</span>
+                    </a>
+                </li>
 
                 <!-- REPORTS -->
                 <li class="sidebar-section-title">Analytics</li>
@@ -459,6 +465,12 @@
                     <a href="{{ route('admin.stats') }}">
                         <i class="fas fa-chart-bar"></i>
                         <span>Statistics</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.payment-history') }}" class="@if(Route::currentRouteName() === 'admin.payment-history') active @endif">
+                        <i class="fas fa-history"></i>
+                        <span>Payment History</span>
                     </a>
                 </li>
                 <li>

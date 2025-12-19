@@ -105,6 +105,45 @@ class User extends Authenticatable
     }
 
     /**
+     * Get all event publishing rights for the user
+     */
+    public function publishingRights(): HasMany
+    {
+        return $this->hasMany(EventPublishingRight::class);
+    }
+
+    /**
+     * Check if user has active publishing rights
+     */
+    public function hasActivePublishingRights(): bool
+    {
+        return $this->publishingRights()
+            ->where('status', 'active')
+            ->where('expires_at', '>', now())
+            ->exists();
+    }
+
+    /**
+     * Get active publishing right
+     */
+    public function getActivePublishingRight()
+    {
+        return $this->publishingRights()
+            ->where('status', 'active')
+            ->where('expires_at', '>', now())
+            ->latest('expires_at')
+            ->first();
+    }
+
+    /**
+     * Get all events for the user
+     */
+    public function events(): HasMany
+    {
+        return $this->hasMany(Event::class);
+    }
+
+    /**
      * Get active tickets for the user
      */
     public function activeTickets()

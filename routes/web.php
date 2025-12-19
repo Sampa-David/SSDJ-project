@@ -5,6 +5,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\eventController;
+use App\Http\Controllers\EventPaymentController;
+use App\Http\Controllers\EventPublicController;
 
 // ========================================
 // PUBLIC ROUTES
@@ -88,6 +91,14 @@ Route::middleware('auth')->group(function () {
     
     // Purchase confirmation
     Route::get('/tickets/confirmation/{ticket}', [TicketController::class, 'confirmation'])->name('tickets.confirmation');
+    
+    // Events Management
+    Route::resource('events', eventController::class);
+    
+    // Event Publishing Payment Routes
+    Route::get('/events/payment', [EventPaymentController::class, 'showPaymentPage'])->name('events.payment');
+    Route::post('/events/payment/process', [EventPaymentController::class, 'processPayment'])->name('events.process-payment');
+    Route::get('/events/payment-confirmation/{publishingRight}', [EventPaymentController::class, 'confirmation'])->name('events.payment-confirmation');
 });
 
 // ========================================
@@ -106,8 +117,26 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/tickets', [AdminDashboardController::class, 'tickets'])->name('tickets');
     Route::get('/tickets/{ticket}', [AdminDashboardController::class, 'showTicket'])->name('ticket');
     
+    // Events Management (Admin can create without payment)
+    Route::get('/events', [AdminDashboardController::class, 'events'])->name('events.index');
+    Route::get('/events/create', [AdminDashboardController::class, 'createEvent'])->name('events.create');
+    Route::post('/events', [AdminDashboardController::class, 'storeEvent'])->name('events.store');
+    Route::get('/events/{event}/edit', [AdminDashboardController::class, 'editEvent'])->name('events.edit');
+    Route::put('/events/{event}', [AdminDashboardController::class, 'updateEvent'])->name('events.update');
+    Route::delete('/events/{event}', [AdminDashboardController::class, 'deleteEvent'])->name('events.destroy');
+    
+    // Payment History
+    Route::get('/payment-history', [AdminDashboardController::class, 'paymentHistory'])->name('payment-history');
+    
     // Statistics & Reports
     Route::get('/stats', [AdminDashboardController::class, 'getStats'])->name('stats');
     Route::get('/export', [AdminDashboardController::class, 'exportStats'])->name('export');
 });
+
+// ========================================
+// PUBLIC EVENTS ROUTES (Must be after authenticated routes to avoid conflicts)
+// ========================================
+Route::get('/browse-events', [EventPublicController::class, 'list'])->name('events.public.list');
+Route::get('/browse-events/{event}', [EventPublicController::class, 'show'])->name('events.public.show');
+
 

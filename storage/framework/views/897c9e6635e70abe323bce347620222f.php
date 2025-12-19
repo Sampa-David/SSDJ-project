@@ -12,6 +12,25 @@
         <li><a href="<?php echo e(route('schedule')); ?>" class="<?php echo $__env->yieldContent('nav-schedule', ''); ?>">Schedule</a></li>
         <li><a href="<?php echo e(route('speakers')); ?>" class="<?php echo $__env->yieldContent('nav-speakers', ''); ?>">Speakers</a></li>
         <li><a href="<?php echo e(route('venue')); ?>" class="<?php echo $__env->yieldContent('nav-venue', ''); ?>">Venue</a></li>
+        <li class="dropdown"><a href="<?php echo e(route('events.public.list')); ?>"><span>Events</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+          <ul>
+            <li><a href="<?php echo e(route('events.public.list')); ?>">All Events</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <?php
+              $upcomingEvents = \App\Models\Event::where('status', 'published')
+                ->where('date_event', '>=', now())
+                ->where('visibility', '=', 'public')
+                ->orderBy('date_event', 'asc')
+                ->take(5)
+                ->get();
+            ?>
+            <?php $__empty_1 = true; $__currentLoopData = $upcomingEvents; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $event): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+              <li><a href="<?php echo e(route('events.public.show', $event->id)); ?>"><?php echo e($event->name); ?> <small class="text-muted">(<?php echo e($event->date_event->format('M d')); ?>)</small></a></li>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+              <li><a href="#" class="text-muted">No upcoming events</a></li>
+            <?php endif; ?>
+          </ul>
+        </li>
         <li class="dropdown"><a href="#"><span>More Pages</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
           <ul>
             <li><a href="<?php echo e(route('buy-tickets')); ?>">Buy Tickets</a></li>

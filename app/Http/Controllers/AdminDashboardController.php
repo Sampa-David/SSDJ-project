@@ -183,4 +183,136 @@ class AdminDashboardController extends Controller
             ->header('Content-Type', 'text/csv')
             ->header('Content-Disposition', 'attachment; filename="tickets-export.csv"');
     }
+
+    /**
+     * Display all events (admin view)
+     */
+    public function events()
+    {
+        $events = \App\Models\Event::with('user')
+            ->orderByDesc('created_at')
+            ->paginate(15);
+
+        return view('admin.events.index', ['events' => $events]);
+    }
+
+    /**
+     * Show create event form
+     */
+    public function createEvent()
+    {
+        $users = \App\Models\User::orderBy('name')->get();
+        return view('admin.events.create', ['users' => $users]);
+    }
+
+    /**
+     * Store event (admin can create without payment)
+     */
+    public function storeEvent(\Illuminate\Http\Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|min:10',
+            'user_id' => 'required|exists:users,id',
+            'date_event' => 'required|date|after:today',
+            'location' => 'required|string|max:255',
+            'visibility' => 'required|in:public,private,friends',
+            'package_type' => 'nullable|string',
+        ]);
+
+        try {
+            \App\Models\Event::create([
+                'user_id' => $request->user_id,
+                'name' => $request->name,
+                'description' => $request->description,
+                'date_event' => $request->date_event,
+                'location' => $request->location,
+                'visibility' => $request->visibility,
+                'status' => 'published',
+                'published_at' => now(),
+                'package_type' => $request->package_type ?? 'admin',
+                'price' => 0,
+                'payment_id' => 'ADMIN_' . uniqid(),
+            ]);
+
+            return redirect()->route('admin.events.index')
+                ->with('success', 'Event created successfully!');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Error creating event: ' . $e->getMessage()]);
+        }
+    }
+
+    /**
+     * Show edit event form
+     */
+    public function editEvent(\App\Models\Event $event)
+    {
+        return view('admin.events.edit', ['event' => $event]);
+    }
+
+    /**
+     * Update event
+     */
+    public function updateEvent(\Illuminate\Http\Request $request, \App\Models\Event $event)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|min:10',
+            'date_event' => 'required|date',
+            'location' => 'required|string|max:255',
+            'visibility' => 'required|in:public,private,friends',
+            'status' => 'required|in:published,draft,expired',
+            'package_type' => 'nullable|string',
+        ]);
+
+        try {
+            $event->update($request->only([
+                'name',
+                'description',
+                'date_event',
+                'location',
+                'visibility',
+                'status',
+                'package_type'
+            ]));
+
+            return redirect()->route('admin.events.index')
+                ->with('success', 'Event updated successfully!');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Error updating event: ' . $e->getMessage()]);
+        }
+    }
+
+    /**
+     * Delete event
+     */
+    public function deleteEvent(\App\Models\Event $event)
+    {
+        try {
+            $event->delete();
+            return redirect()->route('admin.events.index')
+                ->with('success', 'Event deleted successfully!');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Error deleting event: ' . $e->getMessage()]);
+        }
+    }
+
+    /**
+     * Display payment history
+     */
+    public function paymentHistory()
+    {
+        $publishingRights = \App\Models\EventPublishingRight::with('user')
+            ->orderByDesc('purchased_at')
+            ->paginate(15);
+
+        $totalRevenue = \App\Models\EventPublishingRight::sum('price');
+        $totalTransactions = \App\Models\EventPublishingRight::count();
+
+        return view('admin.payment-history', [
+            'publishingRights' => $publishingRights,
+            'totalRevenue' => $totalRevenue,
+            'totalTransactions' => $totalTransactions,
+        ]);
+    }
 }

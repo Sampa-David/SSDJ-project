@@ -12,6 +12,25 @@
         <li><a href="{{ route('schedule') }}" class="@yield('nav-schedule', '')">Schedule</a></li>
         <li><a href="{{ route('speakers') }}" class="@yield('nav-speakers', '')">Speakers</a></li>
         <li><a href="{{ route('venue') }}" class="@yield('nav-venue', '')">Venue</a></li>
+        <li class="dropdown"><a href="{{ route('events.public.list') }}"><span>Events</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+          <ul>
+            <li><a href="{{ route('events.public.list') }}">All Events</a></li>
+            <li><hr class="dropdown-divider"></li>
+            @php
+              $upcomingEvents = \App\Models\Event::where('status', 'published')
+                ->where('date_event', '>=', now())
+                ->where('visibility', '=', 'public')
+                ->orderBy('date_event', 'asc')
+                ->take(5)
+                ->get();
+            @endphp
+            @forelse($upcomingEvents as $event)
+              <li><a href="{{ route('events.public.show', $event->id) }}">{{ $event->name }} <small class="text-muted">({{ $event->date_event->format('M d') }})</small></a></li>
+            @empty
+              <li><a href="#" class="text-muted">No upcoming events</a></li>
+            @endforelse
+          </ul>
+        </li>
         <li class="dropdown"><a href="#"><span>More Pages</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
           <ul>
             <li><a href="{{ route('buy-tickets') }}">Buy Tickets</a></li>
