@@ -1,13 +1,20 @@
 <!-- Floating Message Button -->
 <?php
     $messageRoute = Auth::user()->isAdmin() ? 'admin.messages.admin-conversations' : 'messages.index';
+    try {
+        $unreadCount = Auth::user()->unreadConversationsCount();
+    } catch (\Exception $e) {
+        $unreadCount = 0;
+    }
 ?>
 <a href="<?php echo e(route($messageRoute)); ?>" class="floating-message-btn" title="Messages">
     <img src="<?php echo e(asset('assets/images/message-plane.svg')); ?>" alt="Messages" class="message-plane-icon">
-    <span class="badge badge-notification">
-        <?php echo e(Auth::user()->unreadConversationsCount()); ?>
+    <?php if($unreadCount > 0): ?>
+        <span class="badge badge-notification">
+            <?php echo e($unreadCount); ?>
 
-    </span>
+        </span>
+    <?php endif; ?>
 </a>
 
 <style>
