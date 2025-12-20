@@ -264,3 +264,5 @@
     }
 </script>
 @endpush
+
+@include('components.floating-message-btn')

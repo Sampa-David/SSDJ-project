@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\eventController;
 use App\Http\Controllers\EventPaymentController;
 use App\Http\Controllers\EventPublicController;
+use App\Http\Controllers\MessageController;
 
 // ========================================
 // PUBLIC ROUTES
@@ -92,6 +93,15 @@ Route::middleware('auth')->group(function () {
     // Purchase confirmation
     Route::get('/tickets/confirmation/{ticket}', [TicketController::class, 'confirmation'])->name('tickets.confirmation');
     
+    // Messages & Conversations
+    Route::get('/messages', [MessageController::class, 'index'])->name('messages.index');
+    Route::get('/messages/create', [MessageController::class, 'create'])->name('messages.create');
+    Route::post('/messages', [MessageController::class, 'store'])->name('messages.store');
+    Route::get('/messages/{conversation}', [MessageController::class, 'show'])->name('messages.show');
+    Route::post('/messages/{conversation}/reply', [MessageController::class, 'storeMessage'])->name('messages.reply');
+    Route::post('/messages/{conversation}/close', [MessageController::class, 'close'])->name('messages.close');
+    Route::post('/messages/{conversation}/reopen', [MessageController::class, 'reopen'])->name('messages.reopen');
+    
     // Event Publishing Payment Routes (Must be before Route::resource to avoid conflicts)
     Route::get('/events/payment', [EventPaymentController::class, 'showPaymentPage'])->name('events.payment');
     Route::post('/events/payment/process', [EventPaymentController::class, 'processPayment'])->name('events.process-payment');
@@ -127,6 +137,14 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     
     // Payment History
     Route::get('/payment-history', [AdminDashboardController::class, 'paymentHistory'])->name('payment-history');
+    
+    // Messages Management
+    Route::get('/messages', [MessageController::class, 'adminConversations'])->name('messages.admin-conversations');
+    Route::get('/messages/{conversation}', [MessageController::class, 'show'])->name('messages.show');
+    Route::post('/messages/{conversation}/reply', [MessageController::class, 'storeMessage'])->name('messages.reply');
+    Route::post('/messages/{conversation}/assign', [MessageController::class, 'assignToAdmin'])->name('messages.assign');
+    Route::post('/messages/{conversation}/close', [MessageController::class, 'close'])->name('messages.close');
+    Route::delete('/messages/{conversation}', [MessageController::class, 'destroy'])->name('messages.destroy');
     
     // Statistics & Reports
     Route::get('/stats', [AdminDashboardController::class, 'getStats'])->name('stats');

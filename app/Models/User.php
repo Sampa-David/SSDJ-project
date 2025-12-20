@@ -166,4 +166,55 @@ class User extends Authenticatable
     {
         return $this->tickets()->where('ticket_type', $type)->count();
     }
+
+    /**
+     * Get all conversations where user is client
+     */
+    public function conversations()
+    {
+        return $this->hasMany(Conversation::class, 'user_id');
+    }
+
+    /**
+     * Get all conversations assigned to this admin
+     */
+    public function assignedConversations()
+    {
+        return $this->hasMany(Conversation::class, 'admin_id');
+    }
+
+    /**
+     * Get all messages sent by user
+     */
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    /**
+     * Get unread conversations count for client
+     */
+    public function unreadConversationsCount(): int
+    {
+        return $this->conversations()
+            ->whereHas('messages', function ($query) {
+                $query->whereNull('read_at')
+                    ->where('sender_id', '!=', $this->id);
+            })
+            ->count();
+    }
+
+    /**
+     * Get unread messages for admin assigned conversations
+     */
+    public function unreadAdminMessagesCount(): int
+    {
+        return Message::whereHas('conversation', function ($query) {
+            $query->where('admin_id', $this->id);
+        })
+            ->whereNull('read_at')
+            ->where('sender_id', '!=', $this->id)
+            ->count();
+    }
 }
+

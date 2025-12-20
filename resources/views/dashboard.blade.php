@@ -182,4 +182,7 @@
         </div>
     </div>
 </div>
+
+@include('components.floating-message-btn')
+
 @endsection
