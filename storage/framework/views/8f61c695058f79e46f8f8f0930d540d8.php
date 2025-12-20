@@ -266,4 +266,6 @@
 </script>
 <?php $__env->stopPush(); ?>
 
+<?php echo $__env->make('components.floating-message-btn', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+
 <?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH S:\php(Laravel)\S²DJ\resources\views/admin/dashboard.blade.php ENDPATH**/ ?>

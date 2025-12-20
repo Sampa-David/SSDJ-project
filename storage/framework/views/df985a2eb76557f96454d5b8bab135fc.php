@@ -1,11 +1,9 @@
 <!-- Floating Message Button -->
-@php
-    $messageRoute = Auth::user()->isAdmin() ? 'admin.messages.admin-conversations' : 'messages.index';
-@endphp
-<a href="{{ route($messageRoute) }}" class="floating-message-btn" title="Messages">
-    <img src="{{ asset('assets/images/message-plane.svg') }}" alt="Messages" class="message-plane-icon">
+<a href="<?php echo e(route('messages.index')); ?>" class="floating-message-btn" title="Messages">
+    <img src="<?php echo e(asset('assets/images/message-plane.svg')); ?>" alt="Messages" class="message-plane-icon">
     <span class="badge badge-notification">
-        {{ Auth::user()->unreadConversationsCount() }}
+        <?php echo e(Auth::user()->unreadConversationsCount()); ?>
+
     </span>
 </a>
 
@@ -89,3 +87,4 @@
         }
     }
 </style>
+<?php /**PATH S:\php(Laravel)\S²DJ\resources\views/components/floating-message-btn.blade.php ENDPATH**/ ?>
