@@ -489,6 +489,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="<?php echo e(route('admin.translations.index')); ?>" class="<?php if(Route::currentRouteName() === 'admin.translations.index' || Route::currentRouteName() === 'admin.translations.create' || Route::currentRouteName() === 'admin.translations.edit'): ?> active <?php endif; ?>">
+                        <i class="fas fa-language"></i>
+                        <span>Translations</span>
+                    </a>
+                </li>
+                <li>
                     <a href="<?php echo e(route('admin.users.delete')); ?>" class="<?php if(Route::currentRouteName() === 'admin.users.delete'): ?> active <?php endif; ?>">
                         <i class="fas fa-trash-alt"></i>
                         <span>Delete Users</span>
