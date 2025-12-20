@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 
 class DataGeneratorController extends Controller
 {
@@ -27,6 +28,11 @@ class DataGeneratorController extends Controller
         ]);
 
         try {
+            // Verify database tables exist
+            if (!\Schema::hasTable('users')) {
+                return back()->with('error', 'Database tables not found. Please ensure migrations have been run.');
+            }
+
             // Create users
             $users = User::factory()
                 ->count($validated['users_count'])

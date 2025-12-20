@@ -14,6 +14,14 @@ use App\Http\Controllers\DataGeneratorController;
 use App\Http\Controllers\UserDeleteController;
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\HealthCheckController;
+
+// ========================================
+// HEALTH CHECK ROUTES (No Auth Required)
+// ========================================
+
+Route::get('/health', [HealthCheckController::class, 'check'])->name('health.check');
+Route::get('/status', [HealthCheckController::class, 'status'])->name('health.status');
 
 // ========================================
 // PUBLIC ROUTES
