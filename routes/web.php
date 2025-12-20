@@ -10,6 +10,7 @@ use App\Http\Controllers\EventPaymentController;
 use App\Http\Controllers\EventPublicController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DataGeneratorController;
 
 // ========================================
 // PUBLIC ROUTES
@@ -17,7 +18,11 @@ use App\Http\Controllers\ProfileController;
 
 // Homepage
 Route::get('/', function () {
-    return view('welcome');
+    $featuredEvents = \App\Models\Event::where('status', 'published')
+        ->orderBy('date_event', 'desc')
+        ->limit(6)
+        ->get();
+    return view('welcome', compact('featuredEvents'));
 })->name('home');
 
 // Schedule
@@ -162,6 +167,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Statistics & Reports
     Route::get('/stats', [AdminDashboardController::class, 'getStats'])->name('stats');
     Route::get('/export', [AdminDashboardController::class, 'exportStats'])->name('export');
+    
+    // Data Generator
+    Route::get('/data-generator', [DataGeneratorController::class, 'show'])->name('data-generator.show');
+    Route::post('/data-generator/generate', [DataGeneratorController::class, 'generate'])->name('data-generator.generate');
 });
 
 // ========================================

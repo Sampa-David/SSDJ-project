@@ -483,6 +483,12 @@
                 <!-- SETTINGS -->
                 <li class="sidebar-section-title">System</li>
                 <li>
+                    <a href="{{ route('admin.data-generator.show') }}" class="@if(Route::currentRouteName() === 'admin.data-generator.show') active @endif">
+                        <i class="fas fa-database"></i>
+                        <span>Data Generator</span>
+                    </a>
+                </li>
+                <li>
                     <a href="#settings">
                         <i class="fas fa-cog"></i>
                         <span>Settings</span>
