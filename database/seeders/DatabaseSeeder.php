@@ -17,5 +17,7 @@ class DatabaseSeeder extends Seeder
     {
         // Run the ticket seeder to create 500 users with tickets
         $this->call(TicketSeeder::class);
+        $this->call(EventSeeder::class);
+        $this->call(UserSeeder::class);
     }
 }
