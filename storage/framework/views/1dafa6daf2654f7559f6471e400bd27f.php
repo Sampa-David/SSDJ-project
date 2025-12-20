@@ -12,6 +12,9 @@
         <p class="text-muted">Manage customer conversations and support tickets.</p>
     </div>
     <div class="header-actions">
+        <a href="<?php echo e(route('admin.messages.create')); ?>" class="btn btn-primary">
+            <i class="fas fa-plus"></i> New Message
+        </a>
         <span class="badge bg-info">
             <i class="fas fa-inbox"></i> <?php echo e($conversations->total()); ?> Conversation(s)
         </span>

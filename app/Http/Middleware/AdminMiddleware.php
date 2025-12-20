@@ -15,11 +15,11 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // For now, allow all authenticated users to access admin routes
-        if (Auth::check()) {
+        // Check if user is authenticated and has admin role
+        if (Auth::check() && Auth::user()->isAdmin()) {
             return $next($request);
         }
 
-        abort(403, 'Unauthorized access');
+        abort(403, 'Unauthorized access - Admin role required');
     }
 }

@@ -31,10 +31,6 @@ class MessageController extends Controller
      */
     public function adminConversations()
     {
-        if (Auth::user()->email !== 'admin@gmail.com') {
-            abort(403);
-        }
-
         $conversations = Conversation::with('user', 'messages')
             ->latest('updated_at')
             ->paginate(10);
@@ -65,7 +61,9 @@ class MessageController extends Controller
      */
     public function create()
     {
-        $admins = User::where('email', 'admin@gmail.com')->get();
+        $admins = User::whereHas('roles', function ($query) {
+            $query->where('slug', 'admin');
+        })->get();
 
         return view('messages.create', compact('admins'));
     }
@@ -75,11 +73,9 @@ class MessageController extends Controller
      */
     public function createFromAdmin()
     {
-        if (Auth::user()->email !== 'admin@gmail.com') {
-            abort(403);
-        }
-
-        $clients = User::where('email', '!=', 'admin@gmail.com')->get();
+        $clients = User::whereDoesntHave('roles', function ($query) {
+            $query->where('slug', 'admin');
+        })->get();
 
         return view('messages.create-admin', compact('clients'));
     }
@@ -98,7 +94,7 @@ class MessageController extends Controller
 
         try {
             // Determine who is the user and who is the admin
-            $isAdmin = Auth::user()->email === 'admin@gmail.com';
+            $isAdmin = Auth::user()->isAdmin();
             $userId = $request->filled('client_id') ? $request->client_id : Auth::id();
             $adminId = $isAdmin ? Auth::id() : null;
 
@@ -162,10 +158,6 @@ class MessageController extends Controller
      */
     public function assignToAdmin(Request $request, Conversation $conversation)
     {
-        if (Auth::user()->email !== 'admin@gmail.com') {
-            abort(403);
-        }
-
         $request->validate([
             'admin_id' => 'required|exists:users,id',
         ]);
@@ -220,10 +212,6 @@ class MessageController extends Controller
      */
     public function destroy(Conversation $conversation)
     {
-        if (Auth::user()->email !== 'admin@gmail.com') {
-            abort(403);
-        }
-
         $conversation->delete();
 
         return redirect()->route('messages.admin-conversations')
