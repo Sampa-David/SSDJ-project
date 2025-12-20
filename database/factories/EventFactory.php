@@ -14,16 +14,16 @@ class EventFactory extends Factory
     {
         return [
             'user_id' => 1, // Will be overridden when called
-            'name' => $this->faker->sentence(3),
-            'description' => $this->faker->sentence(10),
-            'date_event' => $this->faker->dateTimeBetween('now', '+1 year'),
-            'location' => $this->faker->city . ', ' . $this->faker->country,
-            'package_type' => $this->faker->randomElement(['starter', 'professional', 'premium']),
-            'price' => $this->faker->numberBetween(100, 5000),
+            'name' => fake('fr_FR')->sentence(3),
+            'description' => fake('fr_FR')->sentence(10),
+            'date_event' => fake('fr_FR')->dateTimeBetween('now', '+1 year'),
+            'location' => fake('fr_FR')->city . ', ' . fake('fr_FR')->country,
+            'package_type' => fake('fr_FR')->randomElement(['starter', 'professional', 'premium']),
+            'price' => fake('fr_FR')->numberBetween(100, 5000),
             'status' => 'published',
             'published_at' => now(),
-            'expires_at' => $this->faker->dateTimeBetween('+1 month', '+1 year'),
-            'visibility' => $this->faker->randomElement(['public', 'private']),
+            'expires_at' => fake('fr_FR')->dateTimeBetween('+1 month', '+1 year'),
+            'visibility' => fake('fr_FR')->randomElement(['public', 'private']),
         ];
     }
 }
