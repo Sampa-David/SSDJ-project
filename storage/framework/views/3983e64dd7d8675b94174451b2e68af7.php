@@ -462,9 +462,9 @@
                 <!-- REPORTS -->
                 <li class="sidebar-section-title">Analytics</li>
                 <li>
-                    <a href="<?php echo e(route('admin.stats')); ?>">
+                    <a href="<?php echo e(route('admin.reports')); ?>" class="<?php if(Route::currentRouteName() === 'admin.reports'): ?> active <?php endif; ?>">
                         <i class="fas fa-chart-bar"></i>
-                        <span>Statistics</span>
+                        <span>Statistics & Reports</span>
                     </a>
                 </li>
                 <li>
@@ -489,15 +489,21 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#settings">
-                        <i class="fas fa-cog"></i>
-                        <span>Settings</span>
+                    <a href="<?php echo e(route('admin.users.delete')); ?>" class="<?php if(Route::currentRouteName() === 'admin.users.delete'): ?> active <?php endif; ?>">
+                        <i class="fas fa-trash-alt"></i>
+                        <span>Delete Users</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#logs">
+                    <a href="<?php echo e(route('admin.activity-logs')); ?>" class="<?php if(Route::currentRouteName() === 'admin.activity-logs'): ?> active <?php endif; ?>">
                         <i class="fas fa-file-alt"></i>
                         <span>Activity Logs</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="<?php echo e(route('admin.settings')); ?>" class="<?php if(Route::currentRouteName() === 'admin.settings'): ?> active <?php endif; ?>">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
                     </a>
                 </li>
 

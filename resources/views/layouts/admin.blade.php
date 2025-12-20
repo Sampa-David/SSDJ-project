@@ -462,9 +462,9 @@
                 <!-- REPORTS -->
                 <li class="sidebar-section-title">Analytics</li>
                 <li>
-                    <a href="{{ route('admin.stats') }}">
+                    <a href="{{ route('admin.reports') }}" class="@if(Route::currentRouteName() === 'admin.reports') active @endif">
                         <i class="fas fa-chart-bar"></i>
-                        <span>Statistics</span>
+                        <span>Statistics & Reports</span>
                     </a>
                 </li>
                 <li>
@@ -489,15 +489,21 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#settings">
-                        <i class="fas fa-cog"></i>
-                        <span>Settings</span>
+                    <a href="{{ route('admin.users.delete') }}" class="@if(Route::currentRouteName() === 'admin.users.delete') active @endif">
+                        <i class="fas fa-trash-alt"></i>
+                        <span>Delete Users</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#logs">
+                    <a href="{{ route('admin.activity-logs') }}" class="@if(Route::currentRouteName() === 'admin.activity-logs') active @endif">
                         <i class="fas fa-file-alt"></i>
                         <span>Activity Logs</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.settings') }}" class="@if(Route::currentRouteName() === 'admin.settings') active @endif">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
                     </a>
                 </li>
 

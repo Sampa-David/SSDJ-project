@@ -11,6 +11,9 @@ use App\Http\Controllers\EventPublicController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DataGeneratorController;
+use App\Http\Controllers\UserDeleteController;
+use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\SettingsController;
 
 // ========================================
 // PUBLIC ROUTES
@@ -138,6 +141,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Users Management
     Route::get('/users', [AdminDashboardController::class, 'users'])->name('users');
     Route::get('/users/{user}', [AdminDashboardController::class, 'showUser'])->name('user');
+    Route::get('/users-delete', [UserDeleteController::class, 'show'])->name('users.delete');
+    Route::delete('/users/{user}/delete', [UserDeleteController::class, 'destroy'])->name('users.destroy');
+    Route::post('/users/bulk-delete', [UserDeleteController::class, 'bulkDelete'])->name('users.bulk-delete');
     
     // Tickets Management
     Route::get('/tickets', [AdminDashboardController::class, 'tickets'])->name('tickets');
@@ -165,12 +171,27 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::delete('/messages/{conversation}', [MessageController::class, 'destroy'])->name('messages.destroy');
     
     // Statistics & Reports
+    Route::get('/reports', function () {
+        return view('admin.stats');
+    })->name('reports');
     Route::get('/stats', [AdminDashboardController::class, 'getStats'])->name('stats');
     Route::get('/export', [AdminDashboardController::class, 'exportStats'])->name('export');
     
     // Data Generator
     Route::get('/data-generator', [DataGeneratorController::class, 'show'])->name('data-generator.show');
     Route::post('/data-generator/generate', [DataGeneratorController::class, 'generate'])->name('data-generator.generate');
+    
+    // Activity Logs
+    Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs');
+    Route::post('/activity-logs/clear', [ActivityLogController::class, 'clearOldLogs'])->name('activity-logs.clear');
+    Route::get('/activity-logs/export', [ActivityLogController::class, 'export'])->name('activity-logs.export');
+    
+    // Settings
+    Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
+    Route::put('/settings', [SettingsController::class, 'update'])->name('settings.update');
+    Route::post('/settings/reset', [SettingsController::class, 'resetDefaults'])->name('settings.reset');
+    Route::post('/settings/clear-cache', [SettingsController::class, 'clearCache'])->name('settings.clear-cache');
+    Route::post('/settings/maintenance', [SettingsController::class, 'toggleMaintenance'])->name('settings.maintenance');
 });
 
 // ========================================
