@@ -32,16 +32,29 @@ class DataGeneratorController extends Controller
                 ->count($validated['users_count'])
                 ->create();
 
+            // Ensure we have users to assign to
+            if ($users->isEmpty()) {
+                return back()->with('error', 'Failed to create users. Please try again.');
+            }
+
             // Create events and assign to random users
+            $eventsCreated = 0;
             for ($i = 0; $i < $validated['events_count']; $i++) {
-                Event::factory()->create([
-                    'user_id' => $users->random()->id
-                ]);
+                try {
+                    Event::factory()->create([
+                        'user_id' => $users->random()->id
+                    ]);
+                    $eventsCreated++;
+                } catch (\Exception $e) {
+                    // Continue creating other events if one fails
+                    continue;
+                }
             }
 
             return redirect()->route('admin.dashboard')
-                ->with('success', "Successfully generated {$validated['users_count']} users and {$validated['events_count']} events!");
+                ->with('success', "Successfully generated {$validated['users_count']} users and {$eventsCreated} events!");
         } catch (\Exception $e) {
+            \Log::error('Data generation error: ' . $e->getMessage());
             return back()
                 ->with('error', 'Error generating data: ' . $e->getMessage());
         }
