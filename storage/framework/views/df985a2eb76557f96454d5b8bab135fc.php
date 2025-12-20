@@ -1,5 +1,8 @@
 <!-- Floating Message Button -->
-<a href="<?php echo e(route('messages.index')); ?>" class="floating-message-btn" title="Messages">
+<?php
+    $messageRoute = Auth::user()->isAdmin() ? 'admin.messages.admin-conversations' : 'messages.index';
+?>
+<a href="<?php echo e(route($messageRoute)); ?>" class="floating-message-btn" title="Messages">
     <img src="<?php echo e(asset('assets/images/message-plane.svg')); ?>" alt="Messages" class="message-plane-icon">
     <span class="badge badge-notification">
         <?php echo e(Auth::user()->unreadConversationsCount()); ?>

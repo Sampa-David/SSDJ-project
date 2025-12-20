@@ -125,6 +125,11 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Admin Dashboard
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
     
+    // Admin Profile Management
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    
     // Users Management
     Route::get('/users', [AdminDashboardController::class, 'users'])->name('users');
     Route::get('/users/{user}', [AdminDashboardController::class, 'showUser'])->name('user');
