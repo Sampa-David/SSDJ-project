@@ -71,6 +71,20 @@ class MessageController extends Controller
     }
 
     /**
+     * Show form to create conversation from admin
+     */
+    public function createFromAdmin()
+    {
+        if (Auth::user()->email !== 'admin@gmail.com') {
+            abort(403);
+        }
+
+        $clients = User::where('email', '!=', 'admin@gmail.com')->get();
+
+        return view('messages.create-admin', compact('clients'));
+    }
+
+    /**
      * Store a new conversation
      */
     public function store(Request $request)
@@ -79,15 +93,22 @@ class MessageController extends Controller
             'subject' => 'required|string|max:255',
             'message' => 'required|string|min:10',
             'priority' => 'nullable|in:low,medium,high',
+            'client_id' => 'nullable|exists:users,id', // For admin creating conversation
         ]);
 
         try {
+            // Determine who is the user and who is the admin
+            $isAdmin = Auth::user()->email === 'admin@gmail.com';
+            $userId = $request->filled('client_id') ? $request->client_id : Auth::id();
+            $adminId = $isAdmin ? Auth::id() : null;
+
             // Create conversation
             $conversation = Conversation::create([
-                'user_id' => Auth::id(),
+                'user_id' => $userId,
+                'admin_id' => $adminId,
                 'subject' => $request->subject,
                 'priority' => $request->priority ?? 'medium',
-                'status' => 'open',
+                'status' => $isAdmin ? 'open' : 'pending',
             ]);
 
             // Create first message
@@ -97,7 +118,9 @@ class MessageController extends Controller
                 'body' => $request->message,
             ]);
 
-            return redirect()->route('messages.show', $conversation)
+            $routeName = $isAdmin ? 'admin.messages.show' : 'messages.show';
+            
+            return redirect()->route($routeName, $conversation)
                 ->with('success', 'Conversation created successfully!');
         } catch (\Exception $e) {
             return back()->withErrors(['error' => 'Error creating conversation: ' . $e->getMessage()]);

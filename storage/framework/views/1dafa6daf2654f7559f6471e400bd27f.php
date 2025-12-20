@@ -1,9 +1,9 @@
-@extends('layouts.admin')
 
-@section('title', 'Messages - Admin')
-@section('page-title', 'Support Messages')
 
-@section('content')
+<?php $__env->startSection('title', 'Messages - Admin'); ?>
+<?php $__env->startSection('page-title', 'Support Messages'); ?>
+
+<?php $__env->startSection('content'); ?>
 
 <!-- Messages Header -->
 <div class="page-header">
@@ -12,25 +12,23 @@
         <p class="text-muted">Manage customer conversations and support tickets.</p>
     </div>
     <div class="header-actions">
-        <a href="{{ route('admin.messages.create') }}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> New Message
-        </a>
         <span class="badge bg-info">
-            <i class="fas fa-inbox"></i> {{ $conversations->total() }} Conversation(s)
+            <i class="fas fa-inbox"></i> <?php echo e($conversations->total()); ?> Conversation(s)
         </span>
     </div>
 </div>
 
 <!-- Success Messages -->
-@if(session('success'))
+<?php if(session('success')): ?>
     <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="fas fa-check-circle"></i> {{ session('success') }}
+        <i class="fas fa-check-circle"></i> <?php echo e(session('success')); ?>
+
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-@endif
+<?php endif; ?>
 
 <!-- Conversations List -->
-@if($conversations->count() > 0)
+<?php if($conversations->count() > 0): ?>
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -49,79 +47,85 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($conversations as $conversation)
-                                <tr class="{{ $conversation->unreadCount() > 0 ? 'table-active' : '' }}">
+                            <?php $__currentLoopData = $conversations; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $conversation): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <tr class="<?php echo e($conversation->unreadCount() > 0 ? 'table-active' : ''); ?>">
                                     <td>
-                                        <strong>{{ $conversation->subject }}</strong>
-                                        @if($conversation->unreadCount() > 0)
+                                        <strong><?php echo e($conversation->subject); ?></strong>
+                                        <?php if($conversation->unreadCount() > 0): ?>
                                             <br>
                                             <small class="text-danger">
-                                                <i class="fas fa-circle"></i> {{ $conversation->unreadCount() }} unread
+                                                <i class="fas fa-circle"></i> <?php echo e($conversation->unreadCount()); ?> unread
                                             </small>
-                                        @endif
+                                        <?php endif; ?>
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center gap-2">
                                             <div class="avatar-sm" style="width: 32px; height: 32px; background: #667eea; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;">
-                                                {{ strtoupper(substr($conversation->user->name, 0, 1)) }}
+                                                <?php echo e(strtoupper(substr($conversation->user->name, 0, 1))); ?>
+
                                             </div>
-                                            <span>{{ $conversation->user->name }}</span>
+                                            <span><?php echo e($conversation->user->name); ?></span>
                                         </div>
                                     </td>
                                     <td>
-                                        @if($conversation->admin)
-                                            <span class="badge bg-primary">{{ $conversation->admin->name }}</span>
-                                        @else
+                                        <?php if($conversation->admin): ?>
+                                            <span class="badge bg-primary"><?php echo e($conversation->admin->name); ?></span>
+                                        <?php else: ?>
                                             <span class="badge bg-secondary">Not Assigned</span>
-                                        @endif
+                                        <?php endif; ?>
                                     </td>
                                     <td>
-                                        <span class="badge bg-{{ $conversation->status === 'open' ? 'success' : ($conversation->status === 'pending' ? 'warning' : 'danger') }}">
-                                            <i class="fas fa-{{ $conversation->status === 'open' ? 'check-circle' : ($conversation->status === 'pending' ? 'clock' : 'ban') }}"></i>
-                                            {{ ucfirst($conversation->status) }}
+                                        <span class="badge bg-<?php echo e($conversation->status === 'open' ? 'success' : ($conversation->status === 'pending' ? 'warning' : 'danger')); ?>">
+                                            <i class="fas fa-<?php echo e($conversation->status === 'open' ? 'check-circle' : ($conversation->status === 'pending' ? 'clock' : 'ban')); ?>"></i>
+                                            <?php echo e(ucfirst($conversation->status)); ?>
+
                                         </span>
                                     </td>
                                     <td>
-                                        <span class="badge bg-{{ $conversation->priority === 'high' ? 'danger' : ($conversation->priority === 'medium' ? 'warning' : 'info') }}">
-                                            <i class="fas fa-{{ $conversation->priority === 'high' ? 'fire' : ($conversation->priority === 'medium' ? 'exclamation' : 'info-circle') }}"></i>
-                                            {{ ucfirst($conversation->priority) }}
+                                        <span class="badge bg-<?php echo e($conversation->priority === 'high' ? 'danger' : ($conversation->priority === 'medium' ? 'warning' : 'info')); ?>">
+                                            <i class="fas fa-<?php echo e($conversation->priority === 'high' ? 'fire' : ($conversation->priority === 'medium' ? 'exclamation' : 'info-circle')); ?>"></i>
+                                            <?php echo e(ucfirst($conversation->priority)); ?>
+
                                         </span>
                                     </td>
                                     <td>
-                                        @if($conversation->unreadCount() > 0)
+                                        <?php if($conversation->unreadCount() > 0): ?>
                                             <span class="badge bg-danger" title="Unread messages">
-                                                {{ $conversation->unreadCount() }}
+                                                <?php echo e($conversation->unreadCount()); ?>
+
                                             </span>
-                                        @else
+                                        <?php else: ?>
                                             <span class="text-muted text-center">-</span>
-                                        @endif
+                                        <?php endif; ?>
                                     </td>
                                     <td>
                                         <small class="text-muted">
-                                            {{ $conversation->updated_at->diffForHumans() }}
+                                            <?php echo e($conversation->updated_at->diffForHumans()); ?>
+
                                         </small>
                                     </td>
                                     <td>
-                                        <a href="{{ route('admin.messages.show', $conversation) }}" class="btn btn-sm btn-primary">
+                                        <a href="<?php echo e(route('admin.messages.show', $conversation)); ?>" class="btn btn-sm btn-primary">
                                             <i class="fas fa-eye"></i> View
                                         </a>
                                     </td>
                                 </tr>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </tbody>
                     </table>
                 </div>
             </div>
 
             <!-- Pagination -->
-            @if($conversations->hasPages())
+            <?php if($conversations->hasPages()): ?>
                 <div class="mt-4 d-flex justify-content-center">
-                    {{ $conversations->links('pagination::bootstrap-5') }}
+                    <?php echo e($conversations->links('pagination::bootstrap-5')); ?>
+
                 </div>
-            @endif
+            <?php endif; ?>
         </div>
     </div>
-@else
+<?php else: ?>
     <div class="row">
         <div class="col-12">
             <div class="card text-center py-5">
@@ -133,7 +137,7 @@
             </div>
         </div>
     </div>
-@endif
+<?php endif; ?>
 
 <style>
     .table-active {
@@ -155,4 +159,6 @@
     }
 </style>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH S:\php(Laravel)\S²DJ\resources\views/messages/admin-conversations.blade.php ENDPATH**/ ?>

@@ -151,6 +151,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     
     // Messages Management
     Route::get('/messages', [MessageController::class, 'adminConversations'])->name('messages.admin-conversations');
+    Route::get('/messages/create', [MessageController::class, 'createFromAdmin'])->name('messages.create');
+    Route::post('/messages', [MessageController::class, 'store'])->name('messages.store');
     Route::get('/messages/{conversation}', [MessageController::class, 'show'])->name('messages.show');
     Route::post('/messages/{conversation}/reply', [MessageController::class, 'storeMessage'])->name('messages.reply');
     Route::post('/messages/{conversation}/assign', [MessageController::class, 'assignToAdmin'])->name('messages.assign');
