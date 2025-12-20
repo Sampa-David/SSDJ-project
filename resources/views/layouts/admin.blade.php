@@ -528,13 +528,30 @@
                     </div>
                 </div>
                 <div class="navbar-right">
-                    <div class="user-menu">
-                        <div class="user-avatar">
-                            {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-                        </div>
-                        <div>
-                            <small class="text-muted">{{ auth()->user()->email }}</small>
-                        </div>
+                    <div class="user-menu dropdown">
+                        <button class="btn btn-link dropdown-toggle p-0" type="button" id="userMenuDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration: none; color: inherit;">
+                            <div class="user-avatar">
+                                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                            </div>
+                            <div>
+                                <small class="text-muted">{{ auth()->user()->email }}</small>
+                            </div>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuDropdown">
+                            <li><a class="dropdown-item" href="{{ route('profile.show') }}">
+                                <i class="fas fa-user me-2"></i> My Profile
+                            </a></li>
+                            <li><a class="dropdown-item" href="{{ route('profile.edit') }}">
+                                <i class="fas fa-edit me-2"></i> Edit Profile
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><form action="{{ route('logout') }}" method="POST" class="d-inline">
+                                @csrf
+                                <button type="submit" class="dropdown-item text-danger">
+                                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                </button>
+                            </form></li>
+                        </ul>
                     </div>
                 </div>
             </nav>

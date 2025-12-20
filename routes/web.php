@@ -9,6 +9,7 @@ use App\Http\Controllers\eventController;
 use App\Http\Controllers\EventPaymentController;
 use App\Http\Controllers\EventPublicController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\ProfileController;
 
 // ========================================
 // PUBLIC ROUTES
@@ -74,6 +75,11 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 Route::middleware('auth')->group(function () {
     // User Dashboard
     Route::get('/dashboard', [TicketController::class, 'dashboard'])->name('dashboard');
+    
+    // Profile Management
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     
     // Purchase ticket
     Route::post('/tickets/purchase', [TicketController::class, 'purchase'])->name('ticket.purchase');

@@ -56,8 +56,8 @@
             @endif
 
             <!-- Profile & Settings -->
-            <a href="#" class="list-group-item list-group-item-action">
-                <i class="fas fa-user me-2"></i> Profile Settings
+            <a href="{{ route('profile.show') }}" class="list-group-item list-group-item-action {{ request()->routeIs('profile.*') ? 'active' : '' }}" style="border-left: 4px solid transparent; {{ request()->routeIs('profile.*') ? 'border-left-color: #667eea' : '' }}">
+                <i class="fas fa-user me-2"></i> My Profile
             </a>
 
             <form action="{{ route('logout') }}" method="POST" style="display: contents;">

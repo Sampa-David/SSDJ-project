@@ -1,5 +1,5 @@
 <!-- Floating Message Button -->
-<a href="{{ route('conversations.index') }}" class="floating-message-btn" title="Messages">
+<a href="{{ route('messages.index') }}" class="floating-message-btn" title="Messages">
     <img src="{{ asset('assets/images/message-plane.svg') }}" alt="Messages" class="message-plane-icon">
     <span class="badge badge-notification">
         {{ Auth::user()->unreadConversationsCount() }}

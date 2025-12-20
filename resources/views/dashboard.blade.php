@@ -16,6 +16,9 @@
                             <div class="text-end">
                                 <p class="small mb-1">Member Since</p>
                                 <p class="h5 mb-0">{{ Auth::user()->created_at->format('M d, Y') }}</p>
+                                <a href="{{ route('profile.edit') }}" class="btn btn-light btn-sm mt-3">
+                                    <i class="fas fa-edit me-1"></i> Edit Profile
+                                </a>
                             </div>
                         </div>
                     </div>
