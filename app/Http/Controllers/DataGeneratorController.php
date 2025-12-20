@@ -33,13 +33,11 @@ class DataGeneratorController extends Controller
                 ->create();
 
             // Create events and assign to random users
-            $events = Event::factory()
-                ->count($validated['events_count'])
-                ->create([
-                    'user_id' => function () use ($users) {
-                        return $users->random()->id;
-                    }
+            for ($i = 0; $i < $validated['events_count']; $i++) {
+                Event::factory()->create([
+                    'user_id' => $users->random()->id
                 ]);
+            }
 
             return redirect()->route('admin.dashboard')
                 ->with('success', "Successfully generated {$validated['users_count']} users and {$validated['events_count']} events!");
